@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSite", "WebSite\WebSite.
 EndProject
 Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "AzureResources", "AzureResources\AzureResources.deployproj", "{754A9F0C-6FA2-4B8E-9A09-FA56BD6F102A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureTableService.Core", "AzureTableService.Core\AzureTableService.Core.csproj", "{5A965299-8668-4109-90C5-1A1C496722DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureTableService.Storage", "AzureTableService.Storage\AzureTableService.Storage.csproj", "{62CE229F-4223-4566-B846-205C159B3F1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{754A9F0C-6FA2-4B8E-9A09-FA56BD6F102A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{754A9F0C-6FA2-4B8E-9A09-FA56BD6F102A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{754A9F0C-6FA2-4B8E-9A09-FA56BD6F102A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A965299-8668-4109-90C5-1A1C496722DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A965299-8668-4109-90C5-1A1C496722DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A965299-8668-4109-90C5-1A1C496722DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A965299-8668-4109-90C5-1A1C496722DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62CE229F-4223-4566-B846-205C159B3F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62CE229F-4223-4566-B846-205C159B3F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62CE229F-4223-4566-B846-205C159B3F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62CE229F-4223-4566-B846-205C159B3F1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

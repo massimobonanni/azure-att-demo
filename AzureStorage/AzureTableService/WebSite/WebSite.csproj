@@ -4,6 +4,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AzureTableService.Core\AzureTableService.Core.csproj" />
+    <ProjectReference Include="..\AzureTableService.Storage\AzureTableService.Storage.csproj" />
+  </ItemGroup>
+
 
 
 </Project>
