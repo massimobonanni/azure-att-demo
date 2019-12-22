@@ -18,6 +18,17 @@ namespace WebSite
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddJsonFile(
+                        "appsettings.json", optional: false, reloadOnChange: false);
+                    config.AddJsonFile(
+                        "appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false);
+                    config.AddJsonFile(
+                        "appsettings.local.json", optional: true, reloadOnChange: false);
+                    config.AddJsonFile(
+                        "appsettings.local.{env.EnvironmentName}.json", optional: true, reloadOnChange: false);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
