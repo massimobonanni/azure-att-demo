@@ -15,10 +15,12 @@ namespace AzureTableService.Storage.Repositories
                 throw new ArgumentNullException(nameof(loggerFactory));
 
             this.StorageConnectionString = GetStorageConnectionString(configuration);
+            CreateStorageAccount();
         }
 
-        protected string StorageConnectionString;
+        protected readonly string StorageConnectionString;
         protected ILogger Logger;
+        protected CloudStorageAccount storageAccount;
 
         internal const string TableServicesSettingsSectionName = "TableServicesSettings";
         internal const string TableServicesConnectionStringKeyName = "StorageConnectionString";
@@ -37,14 +39,14 @@ namespace AzureTableService.Storage.Repositories
             return connectionString;
         }
 
-        protected CloudStorageAccount CreateStorageAccount()
+        protected void CreateStorageAccount()
         {
             if (!CloudStorageAccount.TryParse(this.StorageConnectionString, out var storageAccount))
             {
                 throw new Exception($"Error during creation of StorageAccount");
             }
 
-            return storageAccount;
+            this.storageAccount = storageAccount;
         }
     }
 }

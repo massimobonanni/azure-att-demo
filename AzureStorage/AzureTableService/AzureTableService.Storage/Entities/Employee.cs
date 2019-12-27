@@ -7,7 +7,7 @@ namespace AzureTableService.Storage.Entities
 {
     internal class Employee : TableEntity
     {
-        internal const string EmployeesLogicalTableName = "EMPLOYEES";
+        internal const string EmployeesPartitionKey = "EMPLOYEES";
 
         public Employee():base()
         {
@@ -17,7 +17,7 @@ namespace AzureTableService.Storage.Entities
         public Employee( string employeeId) : base()
         {
             this.RowKey = employeeId;
-            this.PartitionKey = EmployeesLogicalTableName;
+            this.PartitionKey = EmployeesPartitionKey;
         }
 
         public string DepartmentName { get; set; }

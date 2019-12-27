@@ -1,0 +1,45 @@
+﻿@model WebSite.Models.Employees.IndexViewModel
+
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<h1>Employees</h1>
+<form>
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="filterFirstName">First Name</label>
+            <input type="text" class="form-control" id="filterFirstName" name="filterFirstName" placeholder="First name" value="@Model.Filters.FirstName">
+        </div>
+        <div class="form-group col">
+            <label for="filterLastName">Last Name</label>
+            <input type="text" class="form-control" id="filterLastName" name="filterLastName" placeholder="Last Name" value="@Model.Filters.LastName">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>&nbsp;&nbsp;<a asp-action="Create">Create New</a>
+</form>
+<br />
+<table class="table">
+    <thead>
+    <tr>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Employees)
+        {
+        <tr>
+            <td>@item.FirstName</td>
+            <td>@item.LastName  </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.EmployeeId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.EmployeeId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.EmployeeId })
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

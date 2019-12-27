@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AzureTableService.Core.Entities;
 using AzureTableService.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WebSite.Models.Employees;
 
 namespace WebSite.Controllers
 {
@@ -27,85 +29,119 @@ namespace WebSite.Controllers
         }
 
         // GET: Employees
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index([FromQuery(Name = "filterFirstName")]string filterFirstName, [FromQuery(Name = "filterLastName")]string filterLastName)
         {
-            var result = await this.employeesRepository.QueryAsync(new EmployeeSearchFilters(), default(CancellationToken));
-            return View();
+            var filters = new EmployeeSearchFilters()
+            {
+                FirstName = filterFirstName,
+                LastName = filterLastName
+            };
+
+            var result = await this.employeesRepository.QueryAsync(filters, default);
+
+            var model = new IndexViewModel() { Filters = filters, Employees = result };
+
+            return View(model);
         }
 
         // GET: Employees/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(string id)
         {
-            return View();
+            var result = await this.employeesRepository.GetByIdAsync(id, default);
+
+            if (result == null)
+            {
+                return this.NotFound();
+            }
+
+            var model = EditViewModel.FromCoreEmployee(result);
+
+            return View(model);
         }
 
         // GET: Employees/Create
         public ActionResult Create()
         {
-            return View();
+            var model = new CreateViewModel();
+            return View(model);
         }
 
         // POST: Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateViewModel employeeModel)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+                var employee = employeeModel.ToCoreEmployee();
+                var result = await this.employeesRepository.InsertAsync(employee, default);
+                if (result)
+                    return RedirectToAction(nameof(Index));
 
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "An error occurs during insert operation");
             }
-            catch
-            {
-                return View();
-            }
+            return View(employeeModel);
         }
 
         // GET: Employees/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(string id)
         {
-            return View();
+            var result = await this.employeesRepository.GetByIdAsync(id, default);
+
+            if (result == null)
+            {
+                return this.NotFound();
+            }
+
+            var model = EditViewModel.FromCoreEmployee(result);
+
+            return View(model);
         }
 
         // POST: Employees/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(EditViewModel employeeModel)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
+                var employee = employeeModel.ToCoreEmployee();
+                var result = await this.employeesRepository.UpdateAsync(employee, default);
+                if (result)
+                    return RedirectToAction(nameof(Index));
 
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "An error occurs during update operation");
             }
-            catch
-            {
-                return View();
-            }
+            return View(employeeModel);
         }
 
         // GET: Employees/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
-            return View();
+            var result = await this.employeesRepository.GetByIdAsync(id, default);
+
+            if (result == null)
+            {
+                return this.NotFound();
+            }
+
+            var model = DeleteViewModel.FromCoreEmployee(result);
+
+            return View(model);
         }
 
         // POST: Employees/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(DeleteViewModel employeeModel)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
+            var result = await this.employeesRepository.DeleteAsync(employeeModel.EmployeeId, default);
+            if (result)
                 return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+
+            ModelState.AddModelError(string.Empty, "An error occurs during delete operation");
+
+            return View(employeeModel);
         }
     }
 }

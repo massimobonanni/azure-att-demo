@@ -1,0 +1,51 @@
+﻿@model WebSite.Models.Employees.DeleteViewModel
+
+@{
+    ViewData["Title"] = "Delete Employee";
+}
+
+<h1>Delete Employee</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Delete">
+                <div class="form-group">
+                    <input asp-for="EmployeeId" class="form-control" hidden />
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" readonly />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" readonly />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DepartmentName" class="control-label"></label>
+                    <input asp-for="DepartmentName" class="form-control" readonly />
+                    <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" readonly />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BirthDate" class="control-label"></label>
+                    <input asp-for="BirthDate" class="form-control" readonly />
+                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger" hidden></div>
+                <div class="form-group">
+                    <input type="submit" value="Delete" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <a asp-action="Index">Back to List</a>
+</div>

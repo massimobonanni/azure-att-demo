@@ -22,5 +22,34 @@ namespace AzureTableService.Storage.Extensions
                 LastName = employee.LastName
             };
         }
+
+        public static Employee ToTableEmployee(this Core.Entities.Employee employee)
+        {
+            if (employee == null)
+                throw new NullReferenceException(nameof(employee));
+
+            return new Employee(employee.EmployeeId)
+            {
+                BirthDate = employee.BirthDate,
+                DepartmentName = employee.DepartmentName,
+                Email = employee.Email,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName
+            };
+        }
+
+        public static void FillTableEmployee(this Employee tableEmployee, Core.Entities.Employee coreEmployee)
+        {
+            if (tableEmployee == null)
+                throw new NullReferenceException(nameof(tableEmployee));
+            if (coreEmployee == null)
+                throw new ArgumentNullException(nameof(coreEmployee));
+
+            tableEmployee.BirthDate = coreEmployee.BirthDate;
+            tableEmployee.DepartmentName = coreEmployee.DepartmentName;
+            tableEmployee.Email = coreEmployee.Email;
+            tableEmployee.FirstName = coreEmployee.FirstName;
+            tableEmployee.LastName = coreEmployee.LastName;
+        }
     }
 }
