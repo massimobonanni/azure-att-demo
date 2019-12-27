@@ -20,18 +20,18 @@ namespace WebSite
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
+                   config.AddJsonFile(
+                        "appsettings.json", optional: false, reloadOnChange: true);
                     config.AddJsonFile(
-                        "appsettings.json", optional: false, reloadOnChange: false);
+                        "appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
                     config.AddJsonFile(
-                        "appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false);
+                        "appsettings.local.json", optional: true, reloadOnChange: true);
                     config.AddJsonFile(
-                        "appsettings.local.json", optional: true, reloadOnChange: false);
-                    config.AddJsonFile(
-                        "appsettings.local.{env.EnvironmentName}.json", optional: true, reloadOnChange: false);
+                        "appsettings.local.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                   webBuilder.UseStartup<Startup>();
                 });
     }
 }
