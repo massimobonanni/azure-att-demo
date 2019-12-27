@@ -27,14 +27,12 @@ namespace AzureTableService.Storage.Repositories
 
         protected string GetStorageConnectionString(IConfiguration configuration)
         {
-            var section = configuration.GetSection(TableServicesSettingsSectionName);
-            if (section == null)
-                throw new Exception($"The '{TableServicesSettingsSectionName}' configuration section is missing");
+            var fullAppSettingsKey = $"{TableServicesSettingsSectionName}:{TableServicesConnectionStringKeyName}";
 
-            var connectionString = section[TableServicesConnectionStringKeyName];
+            var connectionString = configuration[fullAppSettingsKey];
 
             if (string.IsNullOrWhiteSpace(connectionString))
-                throw new Exception($"The '{TableServicesConnectionStringKeyName}' configuration value is not valid");
+                throw new Exception($"The '{fullAppSettingsKey}' configuration value is not valid or not configured");
 
             return connectionString;
         }
