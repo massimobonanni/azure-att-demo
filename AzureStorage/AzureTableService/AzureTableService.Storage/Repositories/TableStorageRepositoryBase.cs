@@ -32,7 +32,14 @@ namespace AzureTableService.Storage.Repositories
             var connectionString = configuration[fullAppSettingsKey];
 
             if (string.IsNullOrWhiteSpace(connectionString))
-                throw new Exception($"The '{fullAppSettingsKey}' configuration value is not valid or not configured.");
+            {
+                connectionString = configuration.GetConnectionString(TableServicesConnectionStringKeyName);
+            }
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new Exception($"The '{fullAppSettingsKey}' configuration value and {TableServicesConnectionStringKeyName} ConnectionString value are not valid or not configured.");
+            }
 
             return connectionString;
         }
