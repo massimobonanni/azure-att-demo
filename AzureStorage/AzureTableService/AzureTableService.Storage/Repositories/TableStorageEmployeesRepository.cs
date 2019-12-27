@@ -86,7 +86,7 @@ namespace AzureTableService.Storage.Repositories
 
                 TableResult result = await tableReference.ExecuteAsync(operation);
 
-                return result.HttpStatusCode == 200;
+                return result.HttpStatusCode >= 200 && result.HttpStatusCode <= 299;
             }
             catch (StorageException e)
             {
