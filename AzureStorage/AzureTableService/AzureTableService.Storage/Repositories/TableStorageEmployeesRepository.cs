@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AzureTableService.Core.Logger;
 using AzureTableService.Storage.Extensions;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -56,8 +57,12 @@ namespace AzureTableService.Storage.Repositories
 
                 do
                 {
-                    var queryResult = await tableReference.ExecuteQuerySegmentedAsync(query, continuationToken);
-
+                    TableQuerySegment<Entities.Employee> queryResult;
+                    using (var sw = new StopWatcher(Logger, Storage.Logger.LogConstants.QueryDurationMetricName))
+                    {
+                        queryResult = await tableReference.ExecuteQuerySegmentedAsync(query, continuationToken);
+                        sw.AddProperty(Storage.Logger.LogConstants.QueryCountItemMetricName, queryResult.Count());
+                    }
                     results.AddRange(queryResult.Results.Select(e => e.ToCoreEmployee()));
 
                     continuationToken = queryResult.ContinuationToken;
