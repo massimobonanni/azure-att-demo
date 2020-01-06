@@ -9,34 +9,39 @@ namespace AzureTableService.Storage.Helpers
 {
     internal static class EmployeesGenerator
     {
+        static EmployeesGenerator()
+        {
+            BuilderSetup.DisablePropertyNamingFor<Employee, string>(x => x.Email);
+            BuilderSetup.DisablePropertyNamingFor<Employee, string>(x => x.DepartmentName);
+            BuilderSetup.DisablePropertyNamingFor<Employee, DateTime?>(x => x.BirthDate);
+            BuilderSetup.DisablePropertyNamingFor<Employee, string>(x => x.RowKey);
+            BuilderSetup.DisablePropertyNamingFor<Employee, string>(x => x.PartitionKey);
+        }
+
         private static IEnumerable<string> Departments =
-            new List<string>() { "IT", "R&D", "Marketing", "Finance", "Operation","Logistic","Public Relations" };
+            new List<string>() { "IT", "R&D", "Marketing", "Finance", "Operation", "Logistic", "Public Relations" };
 
-		public static IEnumerable<Employee> Generate(int numberOfEmployees)
-		{
-			BuilderSetup.DisablePropertyNamingFor<Employee, string>(x => x.Email);
-			BuilderSetup.DisablePropertyNamingFor<Employee, string>(x => x.DepartmentName);
-			BuilderSetup.DisablePropertyNamingFor<Employee, DateTime?>(x => x.BirthDate);
+        public static IEnumerable<Employee> Generate(int numberOfEmployees)
+        {
+            return Builder<Employee>
+                    .CreateListOfSize(numberOfEmployees)
+                        .All()
+                            .WithFactory(() => GenerateEmployee())
+                        .Build();
+        }
 
-			return Builder<Employee>
-					.CreateListOfSize(numberOfEmployees)
-						.All()
-							.WithFactory(() => GenerateEmployee())
-						.Build();
-		}
-
-		private static Employee GenerateEmployee()
-		{
-			var employee = new Employee();
-			employee.FirstName = Faker.Name.First();
-			employee.LastName = Faker.Name.Last();
-			if (Faker.RandomNumber.Next(0, 100) < 50)
-				employee.Email = $"{employee.FirstName}.{employee.LastName}@{Faker.Internet.DomainName()}";
-			if (Faker.RandomNumber.Next(0, 100) < 50)
-				employee.BirthDate = Faker.DateTimeFaker.BirthDay(18, 65);
-			if (Faker.RandomNumber.Next(0, 100) < 50)
-				employee.DepartmentName = Departments.ElementAt(Faker.RandomNumber.Next(0, Departments.Count()));
-			return employee;
-		}
-	}
+        private static Employee GenerateEmployee()
+        {
+            var employee = new Employee();
+            employee.FirstName = Faker.Name.First();
+            employee.LastName = Faker.Name.Last();
+            if (Faker.RandomNumber.Next(0, 100) < 50)
+                employee.Email = $"{employee.FirstName}.{employee.LastName}@{Faker.Internet.DomainName()}";
+            if (Faker.RandomNumber.Next(0, 100) < 50)
+                employee.BirthDate = Faker.DateTimeFaker.BirthDay(18, 65);
+            if (Faker.RandomNumber.Next(0, 100) < 50)
+                employee.DepartmentName = Departments.ElementAt(Faker.RandomNumber.Next(0, Departments.Count()));
+            return employee;
+        }
+    }
 }

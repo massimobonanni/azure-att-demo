@@ -9,12 +9,13 @@ namespace AzureTableService.Storage.Entities
     {
         internal const string EmployeesPartitionKey = "EMPLOYEES";
 
-        public Employee():base()
+        public Employee() : base()
         {
-            
+            this.RowKey = Guid.NewGuid().ToString();
+            this.PartitionKey = EmployeesPartitionKey;
         }
 
-        public Employee( string employeeId) : base()
+        public Employee(string employeeId) : base()
         {
             this.RowKey = employeeId;
             this.PartitionKey = EmployeesPartitionKey;
