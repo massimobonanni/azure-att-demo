@@ -22,18 +22,24 @@
 <br />
 <table class="table">
     <thead>
-    <tr>
-        <td>First Name</td>
-        <td>Last Name</td>
-        <th></th>
-    </tr>
+        <tr>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Department</td>
+            <td>Email</td>
+            <td>BirthDate</td>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.Employees)
         {
         <tr>
             <td>@item.FirstName</td>
-            <td>@item.LastName  </td>
+            <td>@item.LastName</td>
+            <td>@item.DepartmentName</td>
+            <td>@item.Email</td>
+            <td>@item.BirthDate?.ToString("dd/MM/yyyy")</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.EmployeeId }) |
                 @Html.ActionLink("Details", "Details", new { id = item.EmployeeId }) |
