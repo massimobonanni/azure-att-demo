@@ -9,38 +9,38 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebSite.Controllers
 {
-    public class PersonController : Controller
+    public class CustomerController : Controller
     {
         private readonly AdventureWorksContext _adventureWorksContext;
 
-        public PersonController(AdventureWorksContext adventureWorksContext)
+        public CustomerController(AdventureWorksContext adventureWorksContext)
         {
             this._adventureWorksContext = adventureWorksContext;
         }
 
-        // GET: Person
+        // GET: Customer
         public async Task<ActionResult> Index()
         {
-            var persons = await this._adventureWorksContext.Persons
+            var customers = await this._adventureWorksContext.Customers
                 .Take(10)
                 .ToListAsync();
 
-            return View(persons);
+            return View(customers);
         }
 
-        // GET: Person/Details/5
+        // GET: Customer/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Person/Create
+        // GET: Customer/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Person/Create
+        // POST: Customer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -57,13 +57,13 @@ namespace WebSite.Controllers
             }
         }
 
-        // GET: Person/Edit/5
+        // GET: Customer/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: Person/Edit/5
+        // POST: Customer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -80,13 +80,13 @@ namespace WebSite.Controllers
             }
         }
 
-        // GET: Person/Delete/5
+        // GET: Customer/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Person/Delete/5
+        // POST: Customer/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

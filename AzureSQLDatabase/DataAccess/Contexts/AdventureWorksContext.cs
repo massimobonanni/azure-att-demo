@@ -14,12 +14,12 @@ namespace DataAccess.Contexts
         {
         }
 
-        public DbSet<Person> Persons { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration<Person>(new PersonTypeConfiguration());
+            modelBuilder.ApplyConfiguration<Customer>(new CustomerTypeConfiguration());
         }
     }
 }

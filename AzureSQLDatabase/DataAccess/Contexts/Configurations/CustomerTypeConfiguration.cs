@@ -7,15 +7,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataAccess.Contexts.Configurations
 {
-    internal class PersonTypeConfiguration : IEntityTypeConfiguration<Person>
+    internal class CustomerTypeConfiguration : IEntityTypeConfiguration<Customer>
     {
-        public void Configure(EntityTypeBuilder<Person> builder)
+        public void Configure(EntityTypeBuilder<Customer> builder)
         {
-            builder.ToTable("Person", "Person");
+            builder.ToTable("Customer", "SalesLT");
 
-            builder.HasKey(p => p.BusinessEntityID);
+            builder.HasKey(p => p.CustomerId);
 
-            builder.Property(p => p.PersonType).IsRequired().HasMaxLength(2).IsFixedLength();
             builder.Property(p => p.NameStyle).IsRequired();
             builder.Property(p => p.Title).HasMaxLength(8);
             builder.Property(p => p.FirstName).IsRequired().HasMaxLength(50);
