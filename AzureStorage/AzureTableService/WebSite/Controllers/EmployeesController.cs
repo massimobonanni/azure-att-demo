@@ -143,5 +143,27 @@ namespace WebSite.Controllers
 
             return View(employeeModel);
         }
+
+        public ActionResult Seed()
+        {
+            var model = new SeedViewModel();
+            return View(model);
+        }
+
+        // POST: Employees/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Seed(SeedViewModel seedModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await this.employeesRepository.SeedAsync(seedModel.NumberOfEmployees, default);
+                if (result)
+                    return RedirectToAction(nameof(Index));
+
+                ModelState.AddModelError(string.Empty, "An error occurs during seed operation");
+            }
+            return View(seedModel);
+        }
     }
 }

@@ -13,6 +13,7 @@ using AzureTableService.Core.Logger;
 using AzureTableService.Storage.Extensions;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using AzureTableService.Storage.Helpers;
 
 namespace AzureTableService.Storage.Repositories
 {
@@ -60,7 +61,8 @@ namespace AzureTableService.Storage.Repositories
                     TableQuerySegment<Entities.Employee> queryResult;
                     using (var sw = new StopWatcher(Logger, Storage.Logger.LogConstants.QueryDurationMetricName))
                     {
-                        queryResult = await tableReference.ExecuteQuerySegmentedAsync(query, continuationToken);
+                        queryResult = await tableReference.ExecuteQuerySegmentedAsync(query, continuationToken,
+                            default, default, cancellationToken);
                         sw.AddProperty(Storage.Logger.LogConstants.QueryCountItemMetricName, queryResult.Count());
                     }
                     results.AddRange(queryResult.Results.Select(e => e.ToCoreEmployee()));
@@ -89,7 +91,7 @@ namespace AzureTableService.Storage.Repositories
                 var entity = employee.ToTableEmployee();
                 TableOperation operation = TableOperation.Insert(entity);
 
-                TableResult result = await tableReference.ExecuteAsync(operation);
+                TableResult result = await tableReference.ExecuteAsync(operation, default, default, cancellationToken);
 
                 return result.HttpStatusCode >= 200 && result.HttpStatusCode <= 299;
             }
@@ -115,7 +117,7 @@ namespace AzureTableService.Storage.Repositories
 
                     TableOperation operation = TableOperation.Replace(entity);
 
-                    TableResult result = await tableReference.ExecuteAsync(operation);
+                    TableResult result = await tableReference.ExecuteAsync(operation, default, default, cancellationToken);
 
                     return result.HttpStatusCode >= 200 && result.HttpStatusCode <= 299;
                 }
@@ -142,7 +144,7 @@ namespace AzureTableService.Storage.Repositories
 
                     TableOperation operation = TableOperation.Delete(entity);
 
-                    TableResult result = await tableReference.ExecuteAsync(operation);
+                    TableResult result = await tableReference.ExecuteAsync(operation,default,default,cancellationToken);
 
                     return result.HttpStatusCode >= 200 && result.HttpStatusCode <= 299;
                 }
@@ -153,6 +155,46 @@ namespace AzureTableService.Storage.Repositories
                 this.Logger.LogError(e, "Error during DeleteAsync operation");
                 throw;
             }
+        }
+
+        public async Task<bool> SeedAsync(int numberOfEmployees, CancellationToken cancellationToken)
+        {
+            if (numberOfEmployees <= 0)
+                throw new ArgumentOutOfRangeException(nameof(numberOfEmployees));
+
+            var result = true;
+
+            var tableReference = await CreateTableReference();
+
+            var counter = 0;
+            var maxBatchSize = 100;
+
+            while (counter < numberOfEmployees)
+            {
+                var batchSize = Math.Min(numberOfEmployees - counter, maxBatchSize);
+                var employees = EmployeesGenerator.Generate(batchSize);
+
+                // here put the bacth insert
+                TableBatchOperation batchOperation = new TableBatchOperation();
+                foreach (var employee in employees)
+                {
+                    batchOperation.Insert(employee);
+                }
+
+                try
+                {
+                    await tableReference.ExecuteBatchAsync(batchOperation, default, default, cancellationToken);
+                }
+                catch (Exception e)
+                {
+                    this.Logger.LogError(e, "Error during SeedAsync operation");
+                    throw;
+                }
+
+                counter += batchSize;
+            }
+
+            return result;
         }
         #endregion [ IEmployeesRepository interface ]
 

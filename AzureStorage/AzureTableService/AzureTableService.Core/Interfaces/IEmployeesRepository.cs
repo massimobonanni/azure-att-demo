@@ -18,5 +18,7 @@ namespace AzureTableService.Core.Interfaces
         Task<bool> UpdateAsync(Employee employee, CancellationToken cancellationToken);
 
         Task<bool> DeleteAsync(string employeeId, CancellationToken cancellationToken);
+
+        Task<bool> SeedAsync(int numberOfEmployees, CancellationToken cancellationToken);
     }
 }
