@@ -3,27 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Contexts;
+using DataAccess.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace WebSite.Controllers
 {
     public class CustomerController : Controller
     {
         private readonly AdventureWorksContext _adventureWorksContext;
+        private readonly IConfiguration _configuration;
 
-        public CustomerController(AdventureWorksContext adventureWorksContext)
+        public CustomerController(AdventureWorksContext adventureWorksContext, IConfiguration configuration)
         {
             this._adventureWorksContext = adventureWorksContext;
+            this._configuration = configuration;
         }
 
         // GET: Customer
         public async Task<ActionResult> Index()
         {
-            var customers = await this._adventureWorksContext.Customers
-                .Take(10)
-                .ToListAsync();
+            List<Customer> customers = null;
+
+            try
+            {
+                customers = await this._adventureWorksContext.Customers
+                    .Take(10)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ConnectionString: {this._configuration.GetConnectionString("DefaultConnection")}", ex);
+            }
 
             return View(customers);
         }
