@@ -35,7 +35,8 @@ namespace WebSite.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception($"ConnectionString: {this._configuration.GetConnectionString("DefaultConnection")}", ex);
+                throw;
+                //throw new Exception($"ConnectionString: {this._configuration.GetConnectionString("DefaultConnection")}", ex);
             }
 
             return View(customers);
