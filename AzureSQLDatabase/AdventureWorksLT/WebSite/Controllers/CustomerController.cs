@@ -35,7 +35,24 @@ namespace WebSite.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception($"ConnectionString: {this._configuration.GetConnectionString("DefaultConnection")}", ex);
+                //throw;
+                var segments = this._configuration.GetConnectionString("DefaultConnection").Split(";", StringSplitOptions.RemoveEmptyEntries);
+                var server = "";
+                var dbname = "";
+                foreach (var item in segments)
+                {
+                    var subSegments = item.Split("=");
+                    if (subSegments[0].ToLower() == "server")
+                    {
+                        server = subSegments[1];
+                    }
+                    if (subSegments[0].ToLower() == "database")
+                    {
+                        dbname = subSegments[1];
+                    }
+                }
+
+                throw new Exception($"ConnectionString: Server={server}, dbName={dbname}", ex);
             }
 
             return View(customers);
