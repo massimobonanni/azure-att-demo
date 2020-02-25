@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 namespace WebSite
 {
@@ -20,18 +21,20 @@ namespace WebSite
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
-                   config.AddJsonFile(
-                        "appsettings.json", optional: false, reloadOnChange: true);
+                    config.AddJsonFile(
+                         "appsettings.json", optional: false, reloadOnChange: true);
                     config.AddJsonFile(
                         "appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
                     config.AddJsonFile(
                         "appsettings.local.json", optional: true, reloadOnChange: true);
                     config.AddJsonFile(
                         "appsettings.local.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                    var settings = config.Build();
+                    config.AddAzureAppConfiguration(settings["ConnectionStrings:AppConfig"]);
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                   webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }
