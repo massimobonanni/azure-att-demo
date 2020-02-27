@@ -18,8 +18,13 @@ namespace WebSite.Controllers
             this._configuration = configuration;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var elapsedTime = this._configuration["Performance:PingDelayInMilliseconds"];
+            if (int.TryParse(elapsedTime, out var pingDelayInMilliseconds))
+            {
+                await Task.Delay(pingDelayInMilliseconds);
+            }
             return View();
         }
 
