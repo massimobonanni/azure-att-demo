@@ -29,8 +29,8 @@ namespace WebSite
                         "appsettings.local.json", optional: true, reloadOnChange: true);
                     config.AddJsonFile(
                         "appsettings.local.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-                    //var settings = config.Build();
-                    //config.AddAzureAppConfiguration(settings["ConnectionStrings:AppConfig"]);
+                    var settings = config.Build();
+                    config.AddAzureAppConfiguration(settings["ConnectionStrings:AppConfig"]);
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
