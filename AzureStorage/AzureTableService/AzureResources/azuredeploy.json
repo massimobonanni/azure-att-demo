@@ -267,23 +267,6 @@
         "siteName": "tableserviceapp",
         "hostNameType": "Verified"
       }
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2019-06-01",
-      "dependsOn": [],
-      "kind": "StorageV2",
-      "location": "northeurope",
-      "name": "teststorearm1234567",
-      "properties": {
-        "accessTier": "Hot",
-        "supportsHttpsTrafficOnly": "true",
-        "largeFileSharesState": "Disabled"
-      },
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "tags": {}
     }
   ]
 }

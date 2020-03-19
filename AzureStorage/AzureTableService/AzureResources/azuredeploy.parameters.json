@@ -6,7 +6,7 @@
       "value": "tableserviceweb"
     },
     "components_TableServiceAppInsight_name": {
-      "value": "TableServiceAppInsight"
+      "value": "tableserviceweb"
     },
     "serverfarms_TableServiceAppServicePlan_name": {
       "value": "TableServiceAppPlan"
