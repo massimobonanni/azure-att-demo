@@ -267,22 +267,6 @@
         "siteName": "tableserviceapp",
         "hostNameType": "Verified"
       }
-    },
-    {
-      "name": "mystoragemax12345",
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2019-06-01",
-      "location": "northeurope",
-      "properties": {
-        "accessTier": "hot",
-        "supportsHttpsTrafficOnly": "true"
-      },
-      "dependsOn": [],
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "StorageV2",
-      "tags": {}
     }
   ]
 }
