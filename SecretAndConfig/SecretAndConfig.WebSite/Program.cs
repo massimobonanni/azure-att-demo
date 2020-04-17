@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,32 @@ namespace SecretAndConfig.WebSite
             CreateHostBuilder(args).Build().Run();
         }
 
+        //public static IHostBuilder CreateHostBuilder(string[] args) =>
+        //    Host.CreateDefaultBuilder(args)
+        //        .ConfigureWebHostDefaults(webBuilder =>
+        //        {
+        //            webBuilder.UseStartup<Startup>();
+        //        });
+
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddJsonFile(
+                        "appsettings.json", optional: false, reloadOnChange: true);
+                    config.AddJsonFile(
+                        "appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                    config.AddJsonFile(
+                        "appsettings.local.json", optional: true, reloadOnChange: true);
+                    config.AddJsonFile(
+                        "appsettings.local.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
+                    if (hostingContext.HostingEnvironment.IsAppConfigurationEnvironment())
+                    {
+                        var settings = config.Build();
+                        config.AddAzureAppConfiguration(settings["ConnectionStrings:AppConfig"]);
+                    }
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
