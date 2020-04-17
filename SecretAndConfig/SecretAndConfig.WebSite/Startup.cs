@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.FeatureManagement;
+using SecretAndConfig.WebSite.Services;
 
 namespace SecretAndConfig.WebSite
 {
@@ -24,6 +26,15 @@ namespace SecretAndConfig.WebSite
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            if (Program.CurrentEnvironment.IsAppConfigurationEnvironment())
+            {
+                services.AddFeatureManagement();
+            }
+            else
+            {
+                services.AddSingleton<IFeatureManager>(new FakeFeatureManager());
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +63,7 @@ namespace SecretAndConfig.WebSite
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }

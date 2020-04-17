@@ -12,6 +12,9 @@ namespace SecretAndConfig.WebSite
 {
     public class Program
     {
+
+        public static IHostEnvironment CurrentEnvironment;
+
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -28,6 +31,8 @@ namespace SecretAndConfig.WebSite
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
+                    CurrentEnvironment = hostingContext.HostingEnvironment;
+
                     config.AddJsonFile(
                         "appsettings.json", optional: false, reloadOnChange: true);
                     config.AddJsonFile(
@@ -40,7 +45,10 @@ namespace SecretAndConfig.WebSite
                     if (hostingContext.HostingEnvironment.IsAppConfigurationEnvironment())
                     {
                         var settings = config.Build();
-                        config.AddAzureAppConfiguration(settings["ConnectionStrings:AppConfig"]);
+                        config.AddAzureAppConfiguration(options => {
+                            options.Connect(settings["ConnectionStrings:AppConfig"])
+                                   .UseFeatureFlags();
+                        });
                     }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

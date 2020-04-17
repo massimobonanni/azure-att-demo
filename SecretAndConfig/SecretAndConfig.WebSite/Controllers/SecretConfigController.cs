@@ -7,6 +7,7 @@ using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
+using Microsoft.FeatureManagement;
 using SecretAndConfig.WebSite.Models;
 
 namespace SecretAndConfig.WebSite.Controllers
@@ -14,18 +15,28 @@ namespace SecretAndConfig.WebSite.Controllers
     public class SecretConfigController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly IFeatureManager _featureManager;
 
-        public SecretConfigController(IConfiguration configuration)
+        public SecretConfigController(IConfiguration configuration, IFeatureManager featureManager)
         {
             if (configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
+            if (featureManager == null)
+                throw new ArgumentNullException(nameof(featureManager));
 
             this._configuration = configuration;
+            this._featureManager = featureManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new SecretConfigIndexModel();
+            if (await this._featureManager.IsEnabledAsync(nameof(Features.ReadSecretsWithAAD)))
+            {
+                model.ReadSecretsWithAADEnabled = true;
+            }
+
+            return View(model);
         }
 
         /// <summary>
@@ -75,6 +86,11 @@ namespace SecretAndConfig.WebSite.Controllers
         /// <returns></returns>
         public async Task<IActionResult> CodeKeyVaultWithAppRegistration()
         {
+            if (!await this._featureManager.IsEnabledAsync(nameof(Features.ReadSecretsWithAAD)))
+            {
+                return View("Index");
+            }
+
             var model = new SecretConfigModel();
 
             var applicationId = this._configuration["ApplicationID"];

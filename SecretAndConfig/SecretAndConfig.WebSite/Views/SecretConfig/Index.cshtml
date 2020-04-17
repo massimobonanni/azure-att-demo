@@ -1,4 +1,5 @@
-﻿@using Microsoft.Extensions.Configuration
+﻿@model SecretAndConfig.WebSite.Models.SecretConfigIndexModel
+@using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
 
 @{
@@ -10,5 +11,8 @@
 
 <h3><a class="nav-link text-dark" asp-area="" asp-controller="SecretConfig" asp-action="ConfigIntegration">Platform Integration</a></h3>
 <h3><a class="nav-link text-dark" asp-area="" asp-controller="SecretConfig" asp-action="CodeKeyVaultWithManagedIdentity">Retrieve secret using code (Managed Identity)</a></h3>
+@if(Model.ReadSecretsWithAADEnabled)
+{
 <h3><a class="nav-link text-dark" asp-area="" asp-controller="SecretConfig" asp-action="CodeKeyVaultWithAppRegistration">Retrieve secret using code (App Registration AAD)</a></h3>
+}
 
