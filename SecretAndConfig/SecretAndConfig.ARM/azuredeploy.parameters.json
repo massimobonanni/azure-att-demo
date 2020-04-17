@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "secretandconfig_prefix": {
-      "value": "SecretMax9876"
+      "value": "MaxSecretTest"
     },
     "location": {
       "value": "northeurope"
