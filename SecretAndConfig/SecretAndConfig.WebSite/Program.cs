@@ -42,6 +42,7 @@ namespace SecretAndConfig.WebSite
                     config.AddJsonFile(
                         "appsettings.local.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
+                    #region [ AppConfiguration environment]
                     if (hostingContext.HostingEnvironment.IsAppConfigurationEnvironment())
                     {
                         var settings = config.Build();
@@ -50,6 +51,7 @@ namespace SecretAndConfig.WebSite
                                    .UseFeatureFlags();
                         });
                     }
+                    #endregion [ AppConfiguration environment]
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
