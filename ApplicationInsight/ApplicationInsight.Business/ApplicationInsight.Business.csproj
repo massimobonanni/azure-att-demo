@@ -11,6 +11,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApplicationInsight.Core\ApplicationInsight.Core.csproj" />
+    <ProjectReference Include="..\ApplicationInsight.Mocks\ApplicationInsight.Mocks.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
 
 

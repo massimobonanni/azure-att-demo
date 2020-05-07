@@ -11,6 +11,8 @@ namespace ApplicationInsight.Core.Interfaces
     {
         Task<IEnumerable<ExpenseReportItem>> GetExpenseReportByEmployeeAsync(Guid emoloyeeId, int year, int month, CancellationToken cancellationToken);
 
-        Task<bool> AddExpenseReportAsync(ExpenseReportItem item, CancellationToken cancellationToken);
+        Task<bool> AddExpenseReportItemAsync(ExpenseReportItem item, CancellationToken cancellationToken);
+
+        Task<bool> RemoveExpenseReportItemAsync(Guid itemId, CancellationToken cancellationToken);
     }
 }

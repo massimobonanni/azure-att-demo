@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ApplicationInsight.Business.Services
+namespace ApplicationInsight.Mocks
 {
     public class MockEmployeesProvider : IEmployeesProvider
     {
@@ -57,7 +57,7 @@ namespace ApplicationInsight.Business.Services
 
         public Task<bool> UpdateEmployeeAsync(Employee employee, CancellationToken cancellationToken)
         {
-            var innerEmployee = _innerEmployees.FirstOrDefault(e => e.Id == employee.Id);
+            var innerEmployee = _innerEmployees.FirstOrDefault(e => e == employee);
 
             if (innerEmployee == null)
                 return Task.FromResult(false);
