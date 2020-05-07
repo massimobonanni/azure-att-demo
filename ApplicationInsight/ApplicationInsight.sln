@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationInsight.Core", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationInsight.Mocks", "ApplicationInsight.Mocks\ApplicationInsight.Mocks.csproj", "{80E94C2B-F814-49C6-A2AC-06FDC387BAD0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationInsight.BussinessClient", "ApplicationInsight.BussinessClient\ApplicationInsight.BussinessClient.csproj", "{246791A5-A57F-4D36-9D34-87FA4D3B264D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{80E94C2B-F814-49C6-A2AC-06FDC387BAD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80E94C2B-F814-49C6-A2AC-06FDC387BAD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80E94C2B-F814-49C6-A2AC-06FDC387BAD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{246791A5-A57F-4D36-9D34-87FA4D3B264D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{246791A5-A57F-4D36-9D34-87FA4D3B264D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{246791A5-A57F-4D36-9D34-87FA4D3B264D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{246791A5-A57F-4D36-9D34-87FA4D3B264D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

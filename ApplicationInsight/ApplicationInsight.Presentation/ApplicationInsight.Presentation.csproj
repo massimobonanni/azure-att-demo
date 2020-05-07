@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApplicationInsight.Business\ApplicationInsight.Business.csproj" />
+    <ProjectReference Include="..\ApplicationInsight.BussinessClient\ApplicationInsight.BussinessClient.csproj" />
+    <ProjectReference Include="..\ApplicationInsight.Core\ApplicationInsight.Core.csproj" />
   </ItemGroup>
 
 </Project>
