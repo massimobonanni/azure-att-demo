@@ -18,52 +18,44 @@ namespace ApplicationInsight.Mocks
             _logger = logger;
         }
 
-        private static readonly ICollection<Employee> _innerEmployees =
-            new List<Employee>() {
-                    new Employee() { Id=Guid.NewGuid(), FirstName="Giuseppe",LastName="Rossi"},
-                    new Employee() { Id=Guid.NewGuid(), FirstName="Carlo",LastName="Bianchi"},
-                    new Employee() { Id=Guid.NewGuid(), FirstName="Mario",LastName="Verdi"},
-                    new Employee() { Id=Guid.NewGuid(), FirstName="Laura",LastName="Bianchini"}
-            };
-
         public Task<bool> DeleteEmployeeAsync(Guid employeeId, CancellationToken cancellationToken)
         {
-            var innerEmployee = _innerEmployees.FirstOrDefault(e => e.Id == employeeId);
+            var innerEmployee = Repositories.Employees.FirstOrDefault(e => e.Id == employeeId);
 
             if (innerEmployee == null)
                 return Task.FromResult(false);
 
-            _innerEmployees.Remove(innerEmployee);
+            Repositories.Employees.Remove(innerEmployee);
             return Task.FromResult(true);
 
         }
 
         public Task<Employee> GetEmployeeAsync(Guid employeeId, CancellationToken cancellationToken)
         {
-            var employee = _innerEmployees.FirstOrDefault(e => e.Id == employeeId);
+            var employee = Repositories.Employees.FirstOrDefault(e => e.Id == employeeId);
             return Task.FromResult(employee);
         }
 
         public Task<IEnumerable<Employee>> GetEmployeesAsync(CancellationToken cancellationToken)
         {
-            return Task.FromResult(_innerEmployees.AsEnumerable());
+            return Task.FromResult(Repositories.Employees.AsEnumerable());
         }
 
         public Task<bool> InsertEmployeeAsync(Employee employee, CancellationToken cancellationToken)
         {
-            _innerEmployees.Add(employee);
+            Repositories.Employees.Add(employee);
             return Task.FromResult(true);
         }
 
         public Task<bool> UpdateEmployeeAsync(Employee employee, CancellationToken cancellationToken)
         {
-            var innerEmployee = _innerEmployees.FirstOrDefault(e => e == employee);
+            var innerEmployee = Repositories.Employees.FirstOrDefault(e => e == employee);
 
             if (innerEmployee == null)
                 return Task.FromResult(false);
 
-            _innerEmployees.Remove(innerEmployee);
-            _innerEmployees.Add(employee);
+            Repositories.Employees.Remove(innerEmployee);
+            Repositories.Employees.Add(employee);
 
             return Task.FromResult(true);
         }

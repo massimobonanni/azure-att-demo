@@ -23,13 +23,13 @@ namespace ApplicationInsight.Business.Controllers
             _reportItemsProvider = reportItemsProvider;
         }
 
-        [HttpGet()]
+        [HttpGet("{employeeId}")]
         public async Task<ActionResult<Employee>> GetExpenseReportItemsForEmployeeAsync(Guid employeeId,
             int year, int month)
         {
-            if (year < 0)
+            if (year <= 0)
                 return BadRequest($"{nameof(year)} not valid");
-            if (month < 0)
+            if (month <= 0 || month > 12)
                 return BadRequest($"{nameof(month)} not valid");
             if (employeeId == Guid.Empty)
                 return BadRequest($"{nameof(employeeId)} not valid");
@@ -49,10 +49,22 @@ namespace ApplicationInsight.Business.Controllers
             return Ok(result);
         }
 
-        [HttpDelete()]
+        [HttpDelete("{itemId}")]
         public async Task<ActionResult<bool>> RemoveExpenseReportItemAsync(Guid itemId)
         {
             var result = await _reportItemsProvider.RemoveExpenseReportItemAsync(itemId, default);
+
+            if (result)
+                return Ok(true);
+            else
+                return StatusCode(500);
+        }
+
+        [HttpDelete("{employeeId}")]
+        public async Task<ActionResult<bool>> RemoveExpenseReportItemsForEmployeeAsync(Guid employeeId,
+            int? year, int? month)
+        {
+            var result = await _reportItemsProvider.RemoveExpenseReportItemsForEmployee(employeeId, year, month, default);
 
             if (result)
                 return Ok(true);

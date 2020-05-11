@@ -14,5 +14,7 @@ namespace ApplicationInsight.Core.Interfaces
         Task<bool> AddExpenseReportItemAsync(ExpenseReportItem item, CancellationToken cancellationToken);
 
         Task<bool> RemoveExpenseReportItemAsync(Guid itemId, CancellationToken cancellationToken);
+
+        Task<bool> RemoveExpenseReportItemsForEmployee(Guid emoloyeeId, int? year, int? month, CancellationToken cancellationToken);
     }
 }

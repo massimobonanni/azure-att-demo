@@ -70,7 +70,7 @@ namespace ApplicationInsight.Core.Test
                 new object[] {
                     null,
                     null,
-                    false}
+                    true}
            };
 
         [Theory]
@@ -82,5 +82,44 @@ namespace ApplicationInsight.Core.Test
             Assert.Equal(actual, expectedResult);
         }
         #endregion [ == ]
+
+        #region [ != ]
+        public static IEnumerable<object[]> SetOfObjectsForNotEqualOperatorData =>
+         new List<object[]>
+         {
+                new object[] {
+                    new Employee() {Id=Guid.Parse("C6BD8A7D-09A8-4EEB-8649-F581881632BF") },
+                    new Employee() {Id=Guid.Parse("C6BD8A7D-09A8-4EEB-8649-F581881632BF") },
+                    false},
+                new object[] {
+                    new Employee() {Id=Guid.Parse("C6BD8A7D-09A8-4EEB-8649-F581881632BF") },
+                    new Employee() ,
+                    true},
+                new object[] {
+                    new Employee(),
+                    new Employee() {Id=Guid.Parse("C6BD8A7D-09A8-4EEB-8649-F581881632BF") },
+                    true},
+                new object[] {
+                    new Employee() {Id=Guid.Parse("C6BD8A7D-09A8-4EEB-8649-F581881632BF") },
+                    null,
+                    true},
+                new object[] {
+                    null,
+                    new Employee() {Id=Guid.Parse("C6BD8A7D-09A8-4EEB-8649-F581881632BF") },
+                    true},
+                new object[] {
+                    null,
+                    null,
+                    false}
+         };
+        [Theory]
+        [MemberData(nameof(SetOfObjectsForNotEqualOperatorData))]
+        public void NotEqualOperator_TwoObjects_Result(Employee employee1, Employee employee2, bool expectedResult)
+        {
+            var actual = employee1 != employee2;
+
+            Assert.Equal(actual, expectedResult);
+        }
+        #endregion [ != ]
     }
 }
