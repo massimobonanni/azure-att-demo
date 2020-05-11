@@ -24,15 +24,19 @@ namespace ApplicationInsight.BussinessClient
             var policy = GetHttpRequestPolicy();
 
             var response = await policy.ExecuteAsync(() => client.DeleteAsync(""));
-            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
 
-            var result = JsonSerializer.Deserialize<bool>(content,
-                new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                });
+                var result = JsonSerializer.Deserialize<bool>(content,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    });
 
-            return result;
+                return result;
+            }
+            return false;
         }
 
         protected override HttpClient CreateHttpClient(string apiEndpoint)
@@ -51,15 +55,19 @@ namespace ApplicationInsight.BussinessClient
             var policy = GetHttpRequestPolicy();
 
             var response = await policy.ExecuteAsync(() => client.GetAsync(""));
-            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
 
-            var employee = JsonSerializer.Deserialize<Employee>(content,
-                new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                });
+                var employee = JsonSerializer.Deserialize<Employee>(content,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    });
 
-            return employee;
+                return employee;
+            }
+            return null;
         }
 
         public async Task<IEnumerable<Employee>> GetEmployeesAsync(CancellationToken cancellationToken)
@@ -67,26 +75,84 @@ namespace ApplicationInsight.BussinessClient
             var client = CreateHttpClient(null);
             var policy = GetHttpRequestPolicy();
 
-            var response= await policy.ExecuteAsync(() => client.GetAsync(""));
-            var content = await response.Content.ReadAsStringAsync();
+            var response = await policy.ExecuteAsync(() => client.GetAsync(""));
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
 
-            var employees = JsonSerializer.Deserialize<List<Employee>>(content, 
+                var employees = JsonSerializer.Deserialize<List<Employee>>(content,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    });
+
+                return employees;
+            }
+            return null;
+        }
+
+        public async Task<bool> InsertEmployeeAsync(Employee employee, CancellationToken cancellationToken)
+        {
+            if (employee == null)
+                throw new ArgumentNullException(nameof(employee));
+
+            var client = CreateHttpClient("");
+            var policy = GetHttpRequestPolicy();
+
+            var jsonEmployee = JsonSerializer.Serialize(employee,
                 new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 });
 
-            return employees;
+            var postContent = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
+
+            var response = await policy.ExecuteAsync(() => client.PostAsync("", postContent));
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                var result = JsonSerializer.Deserialize<bool>(content,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    });
+
+                return result;
+            }
+            return false;
         }
 
-        public Task<bool> InsertEmployeeAsync(Employee employee, CancellationToken cancellationToken)
+        public async Task<bool> UpdateEmployeeAsync(Employee employee, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-        }
+            if (employee == null)
+                throw new ArgumentNullException(nameof(employee));
 
-        public Task<bool> UpdateEmployeeAsync(Employee employee, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
+            var client = CreateHttpClient("");
+            var policy = GetHttpRequestPolicy();
+
+            var jsonEmployee = JsonSerializer.Serialize(employee,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                });
+
+            var postContent = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
+
+            var response = await policy.ExecuteAsync(() => client.PutAsync("", postContent));
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                var result = JsonSerializer.Deserialize<bool>(content,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    });
+
+                return result;
+            }
+            return false;
         }
     }
 }

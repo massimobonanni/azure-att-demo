@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ApplicationInsight.Presentation.Models;
 using ApplicationInsight.Core.Interfaces;
+using ApplicationInsight.Core.Entities;
 
 namespace ApplicationInsight.Presentation.Controllers
 {
@@ -18,13 +19,12 @@ namespace ApplicationInsight.Presentation.Controllers
         {
             _logger = logger;
 
-            var result = employeesProvider.DeleteEmployeeAsync(Guid.NewGuid(), default).GetAwaiter().GetResult();
+            var employee = new Employee() { FirstName = "Massimo", LastName = "Bonanni" };
+            var result = employeesProvider.InsertEmployeeAsync(employee, default).GetAwaiter().GetResult();
         }
 
         public IActionResult Index()
         {
-
-
             return View();
         }
 
