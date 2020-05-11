@@ -55,7 +55,6 @@ namespace ApplicationInsight.Business.Controllers
             if (employee == null)
                 return BadRequest($"{nameof(employee)} not valid");
 
-            employee.Id = Guid.NewGuid();
             var result = await _employeesProvider.UpdateEmployeeAsync(employee, default);
 
             return Ok(result);

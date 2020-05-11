@@ -18,9 +18,6 @@ namespace ApplicationInsight.Presentation.Controllers
         public HomeController(ILogger<HomeController> logger, IEmployeesProvider employeesProvider)
         {
             _logger = logger;
-
-            var employee = new Employee() { FirstName = "Massimo", LastName = "Bonanni" };
-            var result = employeesProvider.InsertEmployeeAsync(employee, default).GetAwaiter().GetResult();
         }
 
         public IActionResult Index()

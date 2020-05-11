@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ApplicationInsight.BussinessClient\ApplicationInsight.BussinessClient.csproj" />
     <ProjectReference Include="..\ApplicationInsight.Core\ApplicationInsight.Core.csproj" />
   </ItemGroup>
