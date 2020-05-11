@@ -40,6 +40,9 @@ namespace ApplicationInsight.BussinessClient
 
         protected virtual Uri CreateAPIUri(string apiEndpoint)
         {
+            if (string.IsNullOrWhiteSpace(apiEndpoint))
+                return new Uri($"{this._baseUrl}");
+
             if (apiEndpoint.StartsWith("/"))
                 apiEndpoint = apiEndpoint.Remove(0, 1);
             return new Uri($"{this._baseUrl}/{apiEndpoint}");

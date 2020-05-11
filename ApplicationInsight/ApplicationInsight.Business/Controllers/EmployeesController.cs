@@ -38,7 +38,7 @@ namespace ApplicationInsight.Business.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Employee>> AddEmployeeAsync([FromBody] Employee employee)
+        public async Task<ActionResult<Employee>> InsertEmployeeAsync([FromBody] Employee employee)
         {
             if (employee == null)
                 return BadRequest($"{nameof(employee)} not valid");
@@ -46,10 +46,7 @@ namespace ApplicationInsight.Business.Controllers
             employee.Id = Guid.NewGuid();
             var result = await _employeesProvider.InsertEmployeeAsync(employee, default);
 
-            if (result)
-                return Ok(employee);
-            else
-                return StatusCode(500, employee);
+            return Ok(result);
         }
 
         [HttpPut]
@@ -61,10 +58,7 @@ namespace ApplicationInsight.Business.Controllers
             employee.Id = Guid.NewGuid();
             var result = await _employeesProvider.UpdateEmployeeAsync(employee, default);
 
-            if (result)
-                return Ok(employee);
-            else
-                return StatusCode(500, employee);
+            return Ok(result);
         }
 
         [HttpDelete("{employeeId}")]
@@ -72,10 +66,7 @@ namespace ApplicationInsight.Business.Controllers
         {
             var result = await _employeesProvider.DeleteEmployeeAsync(employeeId, default);
 
-            if (result)
-                return Ok(true);
-            else
-                return StatusCode(500);
+            return Ok(result);
         }
     }
 }

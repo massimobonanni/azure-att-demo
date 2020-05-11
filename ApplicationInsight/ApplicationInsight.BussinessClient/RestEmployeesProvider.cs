@@ -18,17 +18,39 @@ namespace ApplicationInsight.BussinessClient
         {
         }
 
-        public Task<bool> DeleteEmployeeAsync(Guid employeeId, CancellationToken cancellationToken)
+        public async Task<bool> DeleteEmployeeAsync(Guid employeeId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var client = CreateHttpClient($"/{employeeId}");
+            var policy = GetHttpRequestPolicy();
+
+            var response = await policy.ExecuteAsync(() => client.DeleteAsync(""));
+            var content = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<bool>(content,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                });
+
+            return result;
+        }
+
+        protected override HttpClient CreateHttpClient(string apiEndpoint)
+        {
+            if (string.IsNullOrEmpty(apiEndpoint))
+                return base.CreateHttpClient($"/Employees");
+
+            if (apiEndpoint.StartsWith("/"))
+                apiEndpoint = apiEndpoint.Remove(0, 1);
+            return base.CreateHttpClient($"/Employees/{apiEndpoint}");
         }
 
         public async Task<Employee> GetEmployeeAsync(Guid employeeId, CancellationToken cancellationToken)
         {
-            var client = CreateHttpClient("/Employees");
+            var client = CreateHttpClient($"/{employeeId}");
             var policy = GetHttpRequestPolicy();
 
-            var response = await policy.ExecuteAsync(() => client.GetAsync($"/{employeeId}"));
+            var response = await policy.ExecuteAsync(() => client.GetAsync(""));
             var content = await response.Content.ReadAsStringAsync();
 
             var employee = JsonSerializer.Deserialize<Employee>(content,
@@ -42,7 +64,7 @@ namespace ApplicationInsight.BussinessClient
 
         public async Task<IEnumerable<Employee>> GetEmployeesAsync(CancellationToken cancellationToken)
         {
-            var client = CreateHttpClient("/Employees");
+            var client = CreateHttpClient(null);
             var policy = GetHttpRequestPolicy();
 
             var response= await policy.ExecuteAsync(() => client.GetAsync(""));

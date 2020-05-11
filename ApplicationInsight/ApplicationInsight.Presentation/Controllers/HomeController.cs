@@ -18,7 +18,7 @@ namespace ApplicationInsight.Presentation.Controllers
         {
             _logger = logger;
 
-            var result = employeesProvider.GetEmployeesAsync(default).GetAwaiter().GetResult();
+            var result = employeesProvider.DeleteEmployeeAsync(Guid.NewGuid(), default).GetAwaiter().GetResult();
         }
 
         public IActionResult Index()
