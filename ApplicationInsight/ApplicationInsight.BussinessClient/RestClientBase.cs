@@ -15,6 +15,7 @@ namespace ApplicationInsight.BussinessClient
         protected readonly IHttpClientFactory _httpClientFactory;
         protected readonly IConfiguration _configuration;
 
+        protected bool _useRetry;
         protected string _baseUrl;
 
         public RestClientBase(IHttpClientFactory httpClientFactory, IConfiguration configuration)
@@ -27,15 +28,21 @@ namespace ApplicationInsight.BussinessClient
 
         protected void ReadConfiguration()
         {
-            var session = this._configuration.GetSection("RestClient");
-            if (session == null)
+            var section = this._configuration.GetSection("RestClient");
+            if (section == null)
                 throw new Exception("Configuration is not valid. Add 'RestClient' section");
 
-            this._baseUrl = session["BaseUrl"];
+            this._baseUrl = section["BaseUrl"];
             if (string.IsNullOrWhiteSpace(this._baseUrl))
                 throw new Exception("Configuration is not valid. Add 'BaseUrl' value");
             if (this._baseUrl.EndsWith("/"))
                 this._baseUrl = this._baseUrl.Remove(this._baseUrl.Length - 1);
+
+            this._useRetry = false;
+            if (bool.TryParse(section["UseRetry"], out var useRetry))
+            {
+                this._useRetry = useRetry;
+            }
         }
 
         protected virtual Uri CreateAPIUri(string apiEndpoint)
@@ -63,6 +70,19 @@ namespace ApplicationInsight.BussinessClient
                       .RetryAsync(3);
 
             return retryPolicy;
+        }
+
+        protected virtual Task<HttpResponseMessage> ExecuteHttpRequestAsync(Func<Task<HttpResponseMessage>> requestFunc)
+        {
+            if (this._useRetry)
+            {
+                var policy = GetHttpRequestPolicy();
+                return policy.ExecuteAsync(requestFunc);
+            }
+            else
+            {
+                return requestFunc();
+            }
         }
     }
 }

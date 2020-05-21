@@ -22,9 +22,7 @@ namespace ApplicationInsight.BussinessClient
         {
             using (var client = CreateHttpClient($"/{employeeId}"))
             {
-                var policy = GetHttpRequestPolicy();
-
-                var response = await policy.ExecuteAsync(() => client.DeleteAsync(""));
+                var response = await ExecuteHttpRequestAsync(() => client.DeleteAsync(""));
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -55,9 +53,7 @@ namespace ApplicationInsight.BussinessClient
         {
             using (var client = CreateHttpClient($"/{employeeId}"))
             {
-                var policy = GetHttpRequestPolicy();
-
-                var response = await policy.ExecuteAsync(() => client.GetAsync(""));
+                var response = await ExecuteHttpRequestAsync(() => client.GetAsync(""));
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -80,9 +76,8 @@ namespace ApplicationInsight.BussinessClient
         {
             using (var client = CreateHttpClient(null))
             {
-                var policy = GetHttpRequestPolicy();
+                var response = await ExecuteHttpRequestAsync(() => client.GetAsync(""));
 
-                var response = await policy.ExecuteAsync(() => client.GetAsync(""));
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -106,17 +101,15 @@ namespace ApplicationInsight.BussinessClient
 
             using (var client = CreateHttpClient(""))
             {
-                var policy = GetHttpRequestPolicy();
-
                 var jsonEmployee = JsonSerializer.Serialize(employee,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                    });
+                  new JsonSerializerOptions
+                  {
+                      PropertyNameCaseInsensitive = true,
+                  });
 
                 var postContent = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
 
-                var response = await policy.ExecuteAsync(() => client.PostAsync("", postContent));
+                var response = await ExecuteHttpRequestAsync(() => client.PostAsync("", postContent));
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -140,8 +133,6 @@ namespace ApplicationInsight.BussinessClient
 
             using (var client = CreateHttpClient(""))
             {
-                var policy = GetHttpRequestPolicy();
-
                 var jsonEmployee = JsonSerializer.Serialize(employee,
                     new JsonSerializerOptions
                     {
@@ -150,7 +141,7 @@ namespace ApplicationInsight.BussinessClient
 
                 var postContent = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
 
-                var response = await policy.ExecuteAsync(() => client.PutAsync("", postContent));
+                var response = await ExecuteHttpRequestAsync(() => client.PutAsync("", postContent));
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
