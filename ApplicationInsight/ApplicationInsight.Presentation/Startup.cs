@@ -25,9 +25,11 @@ namespace ApplicationInsight.Presentation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IEmployeesProvider, RestEmployeesProvider>();
-
             services.AddHttpClient();
+            services.AddHttpClient<IEmployeesProvider, RestEmployeesProvider>();
+
+            //services.AddTransient<IEmployeesProvider, RestEmployeesProvider>();
+
             services.AddControllersWithViews();
         }
 
@@ -46,7 +48,7 @@ namespace ApplicationInsight.Presentation
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            
             app.UseRouting();
 
             app.UseAuthorization();

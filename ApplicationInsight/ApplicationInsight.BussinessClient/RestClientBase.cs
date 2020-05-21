@@ -13,15 +13,15 @@ namespace ApplicationInsight.BussinessClient
 {
     public abstract class RestClientBase
     {
-        protected readonly IHttpClientFactory _httpClientFactory;
+        protected readonly HttpClient _httpClient;
         protected readonly IConfiguration _configuration;
 
         protected bool _useRetry;
         protected string _baseUrl;
 
-        public RestClientBase(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public RestClientBase(HttpClient httpClient, IConfiguration configuration)
         {
-            this._httpClientFactory = httpClientFactory;
+            this._httpClient = httpClient;
             this._configuration = configuration;
 
             ReadConfiguration();
@@ -58,9 +58,9 @@ namespace ApplicationInsight.BussinessClient
 
         protected virtual HttpClient CreateHttpClient(string apiEndpoint)
         {
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = CreateAPIUri(apiEndpoint);
-            return client;
+            //var client = _httpClientFactory.CreateClient();
+            this._httpClient.BaseAddress = CreateAPIUri(apiEndpoint);
+            return this._httpClient;
         }
 
         protected virtual AsyncRetryPolicy<HttpResponseMessage> GetHttpRequestPolicy()

@@ -13,8 +13,8 @@ namespace ApplicationInsight.BussinessClient
 {
     public class RestEmployeesProvider : RestClientBase, IEmployeesProvider
     {
-        public RestEmployeesProvider(IHttpClientFactory httpClientFactory, IConfiguration configuration)
-            : base(httpClientFactory, configuration)
+        public RestEmployeesProvider(HttpClient httpClient, IConfiguration configuration)
+            : base(httpClient, configuration)
         {
         }
 
@@ -49,6 +49,11 @@ namespace ApplicationInsight.BussinessClient
             return base.CreateHttpClient($"/Employees/{apiEndpoint}");
         }
 
+        protected override Task<HttpResponseMessage> ExecuteHttpRequestAsync(Func<Task<HttpResponseMessage>> requestFunc)
+        {
+            return requestFunc();
+        }
+
         public async Task<Employee> GetEmployeeAsync(Guid employeeId, CancellationToken cancellationToken)
         {
             using (var client = CreateHttpClient($"/{employeeId}"))
@@ -74,88 +79,86 @@ namespace ApplicationInsight.BussinessClient
 
         public async Task<IEnumerable<Employee>> GetEmployeesAsync(CancellationToken cancellationToken)
         {
-            using (var client = CreateHttpClient(null))
+            var client = CreateHttpClient(null);
+            //var response = await ExecuteHttpRequestAsync(() => client.GetAsync(""));
+            var response = await client.GetAsync("");
+            if (response.IsSuccessStatusCode)
             {
-                var response = await ExecuteHttpRequestAsync(() => client.GetAsync(""));
+                var content = await response.Content.ReadAsStringAsync();
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-
-                    var employees = JsonSerializer.Deserialize<List<Employee>>(content,
-                        new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                        });
-
-                    return employees;
-                }
-            }
-            return null;
-        }
-
-        public async Task<bool> InsertEmployeeAsync(Employee employee, CancellationToken cancellationToken)
-        {
-            if (employee == null)
-                throw new ArgumentNullException(nameof(employee));
-
-            using (var client = CreateHttpClient(""))
-            {
-                var jsonEmployee = JsonSerializer.Serialize(employee,
-                  new JsonSerializerOptions
-                  {
-                      PropertyNameCaseInsensitive = true,
-                  });
-
-                var postContent = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
-
-                var response = await ExecuteHttpRequestAsync(() => client.PostAsync("", postContent));
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-
-                    var result = JsonSerializer.Deserialize<bool>(content,
-                        new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                        });
-
-                    return result;
-                }
-            }
-            return false;
-        }
-
-        public async Task<bool> UpdateEmployeeAsync(Employee employee, CancellationToken cancellationToken)
-        {
-            if (employee == null)
-                throw new ArgumentNullException(nameof(employee));
-
-            using (var client = CreateHttpClient(""))
-            {
-                var jsonEmployee = JsonSerializer.Serialize(employee,
+                var employees = JsonSerializer.Deserialize<List<Employee>>(content,
                     new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true,
                     });
 
-                var postContent = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
-
-                var response = await ExecuteHttpRequestAsync(() => client.PutAsync("", postContent));
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-
-                    var result = JsonSerializer.Deserialize<bool>(content,
-                        new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                        });
-
-                    return result;
-                }
+                return employees;
             }
-            return false;
+            return null;
         }
+
+    public async Task<bool> InsertEmployeeAsync(Employee employee, CancellationToken cancellationToken)
+    {
+        if (employee == null)
+            throw new ArgumentNullException(nameof(employee));
+
+        using (var client = CreateHttpClient(""))
+        {
+            var jsonEmployee = JsonSerializer.Serialize(employee,
+              new JsonSerializerOptions
+              {
+                  PropertyNameCaseInsensitive = true,
+              });
+
+            var postContent = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
+
+            var response = await ExecuteHttpRequestAsync(() => client.PostAsync("", postContent));
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                var result = JsonSerializer.Deserialize<bool>(content,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    });
+
+                return result;
+            }
+        }
+        return false;
     }
+
+    public async Task<bool> UpdateEmployeeAsync(Employee employee, CancellationToken cancellationToken)
+    {
+        if (employee == null)
+            throw new ArgumentNullException(nameof(employee));
+
+        using (var client = CreateHttpClient(""))
+        {
+            var jsonEmployee = JsonSerializer.Serialize(employee,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                });
+
+            var postContent = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
+
+            var response = await ExecuteHttpRequestAsync(() => client.PutAsync("", postContent));
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                var result = JsonSerializer.Deserialize<bool>(content,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    });
+
+                return result;
+            }
+        }
+        return false;
+    }
+}
 }
