@@ -267,22 +267,6 @@
         "siteName": "tableserviceapp",
         "hostNameType": "Verified"
       }
-    },
-    {
-      "name": "maxstore20200610",
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2019-06-01",
-      "location": "westeurope",
-      "properties": {
-        "accessTier": "Hot",
-        "supportsHttpsTrafficOnly": "true"
-      },
-      "dependsOn": [],
-      "sku": {
-        "name": "Standard_RAGRS"
-      },
-      "kind": "StorageV2",
-      "tags": {}
     }
   ]
 }
