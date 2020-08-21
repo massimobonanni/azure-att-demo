@@ -46,7 +46,8 @@ namespace SecretAndConfig.WebSite
                     if (hostingContext.HostingEnvironment.IsAppConfigurationEnvironment())
                     {
                         var settings = config.Build();
-                        config.AddAzureAppConfiguration(options => {
+                        config.AddAzureAppConfiguration(options =>
+                        {
                             options.Connect(settings["ConnectionStrings:AppConfig"])
                                    .UseFeatureFlags();
                         });
