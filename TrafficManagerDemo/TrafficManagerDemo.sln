@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSite", "WebSite\WebSite.csproj", "{59D2F34D-6DB8-429B-AF9A-B3B0AB82434D}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "AzureResource", "AzureResource\AzureResource.deployproj", "{2DCFF9F5-3DE0-469E-99A5-7CCC240C853A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Powershell", "Powershell", "{6BDCF79F-C2C1-4AE9-98EB-CC48536F7945}"
+	ProjectSection(SolutionItems) = preProject
+		SetAppServicesForProduction.ps1 = SetAppServicesForProduction.ps1
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59D2F34D-6DB8-429B-AF9A-B3B0AB82434D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D2F34D-6DB8-429B-AF9A-B3B0AB82434D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59D2F34D-6DB8-429B-AF9A-B3B0AB82434D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D2F34D-6DB8-429B-AF9A-B3B0AB82434D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DCFF9F5-3DE0-469E-99A5-7CCC240C853A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DCFF9F5-3DE0-469E-99A5-7CCC240C853A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DCFF9F5-3DE0-469E-99A5-7CCC240C853A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DCFF9F5-3DE0-469E-99A5-7CCC240C853A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E17F9EC9-74B1-41F0-ADA4-02E83D30BE66}
+	EndGlobalSection
+EndGlobal

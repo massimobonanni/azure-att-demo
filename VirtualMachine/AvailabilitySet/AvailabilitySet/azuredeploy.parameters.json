@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualMachines_vm1_name": {
+      "value": "vm1"
+    },
+    "virtualMachines_vm2_name": {
+      "value": "vm2"
+    },
+    "networkInterfaces_vm1_name": {
+      "value": "vm1netint"
+    },
+    "networkInterfaces_vm2_name": {
+      "value": "vm2netint"
+    },
+    "publicIPAddresses_vm1_ip_name": {
+      "value": "vm1-ip"
+    },
+    "publicIPAddresses_vm2_ip_name": {
+      "value": "vm2-ip"
+    },
+    "networkSecurityGroups_nsg_name": {
+      "value": "nsg"
+    },
+    "availabilitySets_VMAvailabilitySet_name": {
+      "value": "VMAvailabilitySet"
+    },
+    "loadBalancers_VMAvailabilityBalancer_name": {
+      "value": "VMLoadBalancer"
+    },
+    "virtualNetworks_VMAvailabilityDemo_vnet_name": {
+      "value": "vnet"
+    },
+    "storageAccounts_vmavailabilitydemorgdiag_name": {
+      "value": "vmavailabilitydiag"
+    },
+    "publicIPAddresses_VMAvailabilityBalancer_ip_name": {
+      "value": "VMLoadBalancer-ip"
+    }
+  }
+}

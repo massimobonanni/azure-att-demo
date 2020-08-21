@@ -1,0 +1,36 @@
+﻿@model SecretAndConfig.WebSite.Models.SecretConfigModel
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@{
+    ViewData["Title"] = $"{Configuration["PublicSection:Title"]} - Retrieve Secret Using Code (Managed Identity)";
+}
+<h1>Retrieve Secret Using Code (Managed Identity)</h1>
+<br />
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+<div class="alert alert-danger" role="alert">
+    @Model.Error
+</div>
+}
+<br />
+@foreach (var item in Model.Sections)
+{
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th colspan="2"><h4>Section : @item.Name</h4></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var config in item.Values)
+            {
+        <tr>
+            <th scope="row">@config.Key</th>
+            <td>@config.Value</td>
+        </tr>
+            }
+    </tbody>
+</table>
+
+}

@@ -1,0 +1,11 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@{
+    ViewData["Title"] = $"{Configuration["PublicSection:Title"]} - Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Environment @Configuration["ASPNETCORE_ENVIRONMENT"]</p>
+</div>

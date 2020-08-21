@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "secretandconfig_prefix": {
+      "value": "MaxSecretTest"
+    },
+    "location": {
+      "value": "northeurope"
+    },
+    "actionGroups_Application_Insights_Smart_Detection_name": {
+      "value": "Application Insights Smart Detection"
+    },
+    "smartdetectoralertrules_failure_anomalies___secretandconfigappinsight_name": {
+      "value": "failure anomalies - secretandconfigappinsight"
+    }
+  }
+}
