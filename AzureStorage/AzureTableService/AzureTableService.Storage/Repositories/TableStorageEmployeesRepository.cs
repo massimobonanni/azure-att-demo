@@ -49,9 +49,9 @@ namespace AzureTableService.Storage.Repositories
                 throw new ArgumentNullException(nameof(filters));
             try
             {
-                var tableReference = await CreateTableReference();
-
-                var query = new TableQuery<Entities.Employee>().Where(filters.GenerateFilterCondition());
+                var tableReference = await CreateTableReference(EmployeesTableName);
+                var strFilter = filters.GenerateFilterCondition();
+                var query = new TableQuery<Entities.Employee>().Where(strFilter);
 
                 var continuationToken = default(TableContinuationToken);
                 var results = new List<Employee>();
@@ -64,6 +64,8 @@ namespace AzureTableService.Storage.Repositories
                         queryResult = await tableReference.ExecuteQuerySegmentedAsync(query, continuationToken,
                             default, default, cancellationToken);
                         sw.AddProperty(Storage.Logger.LogConstants.QueryCountItemMetricName, queryResult.Count());
+                        sw.AddProperty(Storage.Logger.LogConstants.QueryFilterName, strFilter);
+                        sw.AddProperty(Storage.Logger.LogConstants.QueryTableName, tableReference.Name);
                     }
                     results.AddRange(queryResult.Results.Select(e => e.ToCoreEmployee()));
 
@@ -87,7 +89,7 @@ namespace AzureTableService.Storage.Repositories
 
             try
             {
-                var tableReference = await CreateTableReference();
+                var tableReference = await CreateTableReference(EmployeesTableName);
                 var entity = employee.ToTableEmployee();
                 TableOperation operation = TableOperation.Insert(entity);
 
@@ -113,7 +115,7 @@ namespace AzureTableService.Storage.Repositories
                 if (entity != null)
                 {
                     entity.FillTableEmployee(employee);
-                    var tableReference = await CreateTableReference();
+                    var tableReference = await CreateTableReference(EmployeesTableName);
 
                     TableOperation operation = TableOperation.Replace(entity);
 
@@ -140,11 +142,11 @@ namespace AzureTableService.Storage.Repositories
                 var entity = await this.GetByIdInternalAsync(employeeId, cancellationToken);
                 if (entity != null)
                 {
-                    var tableReference = await CreateTableReference();
+                    var tableReference = await CreateTableReference(EmployeesTableName);
 
                     TableOperation operation = TableOperation.Delete(entity);
 
-                    TableResult result = await tableReference.ExecuteAsync(operation,default,default,cancellationToken);
+                    TableResult result = await tableReference.ExecuteAsync(operation, default, default, cancellationToken);
 
                     return result.HttpStatusCode >= 200 && result.HttpStatusCode <= 299;
                 }
@@ -164,7 +166,7 @@ namespace AzureTableService.Storage.Repositories
 
             var result = true;
 
-            var tableReference = await CreateTableReference();
+            var tableReference = await CreateTableReference(EmployeesTableName);
 
             var counter = 0;
             var maxBatchSize = 100;
@@ -199,20 +201,12 @@ namespace AzureTableService.Storage.Repositories
         #endregion [ IEmployeesRepository interface ]
 
         #region [ Private methods ]
-        private async Task<CloudTable> CreateTableReference()
-        {
-            CloudTableClient cloudTableClient = storageAccount.CreateCloudTableClient();
-            var tableReference = cloudTableClient.GetTableReference(EmployeesTableName);
-
-            await tableReference.CreateIfNotExistsAsync();
-            return tableReference;
-        }
-
+        
         private async Task<Entities.Employee> GetByIdInternalAsync(string employeeId, CancellationToken cancellationToken)
         {
             try
             {
-                var tableReference = await CreateTableReference();
+                var tableReference = await CreateTableReference(EmployeesTableName);
 
                 var query = new TableQuery<Entities.Employee>().Where((new EmployeeSearchFilters() { EmployeeId = employeeId }).GenerateFilterCondition());
 

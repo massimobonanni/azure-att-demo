@@ -9,11 +9,9 @@ namespace AzureTableService.Core.Interfaces
 {
     public interface IVacationsRepository
     {
-        Task<IEnumerable<Employee>> QueryAsync(VacationsSearchFilters filter, CancellationToken cancellationToken);
+        Task<IEnumerable<Vacation>> QueryAsync(VacationSearchFilters filter, CancellationToken cancellationToken);
 
-        Task<bool> InsertAsync(Vacation vacation, CancellationToken cancellationToken);
-
-        Task<bool> UpdateAsync(Vacation vacation, CancellationToken cancellationToken);
+        Task<bool> UpsertAsync(Vacation vacation, CancellationToken cancellationToken);
 
         Task<bool> DeleteAsync(string employeeId, DateTime vacationDate, CancellationToken cancellationToken);
     }
