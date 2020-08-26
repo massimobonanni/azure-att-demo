@@ -25,6 +25,7 @@ namespace AzureTableService.Storage.Entities
             set => this.PartitionKey = value;
         }
 
+        [IgnoreProperty]
         public DateTime Date
         {
             get => DateTime.ParseExact(this.RowKey, "yyyyMMdd", CultureInfo.InvariantCulture);

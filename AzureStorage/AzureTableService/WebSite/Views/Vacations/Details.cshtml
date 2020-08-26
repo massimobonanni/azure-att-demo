@@ -1,0 +1,63 @@
+﻿@model WebSite.Models.Vacations.DetailViewModel
+
+@{
+    ViewData["Title"] = "Employee Vacation Details";
+}
+
+<h1>Employee Vacation Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.DepartmentName)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.DepartmentName)
+        </dd>
+    </dl>
+</div>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <td>Date</td>
+            <td>Description</td>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Vacations)
+        {
+            <tr>
+                <td>@item.FromDate.ToString("dd/MM/yyyy")</td>
+                <td>@item.Description</td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { employeeId = item.EmployeeId, date = item.FromDate })
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">
+                @Html.ActionLink("New Vacation", "Create", new { employeeId = Model.EmployeeId })
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<div>
+    <a asp-action="Index" asp-controller="Employee">Back to List</a>
+</div>

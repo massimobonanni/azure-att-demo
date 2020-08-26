@@ -33,20 +33,24 @@ namespace AzureTableService.Storage.Repositories
 
             try
             {
-                var tableReference = await CreateTableReference(VacationsTableName);
-                var entity = new AzureTableService.Storage.Entities.Vacation(employeeId, vacationDate);
+                var entity = await this.GetByEmployeeAndDateInternalAsync(employeeId, vacationDate, cancellationToken);
 
-                TableOperation operation = TableOperation.Delete(entity);
+                if (entity != null)
+                {
+                    var tableReference = await CreateTableReference(VacationsTableName);
+                    TableOperation operation = TableOperation.Delete(entity);
 
-                var operationResult = await tableReference.ExecuteAsync(operation, default, default, cancellationToken);
-                return operationResult.HttpStatusCode >= 200 && operationResult.HttpStatusCode <= 299;
+                    var operationResult = await tableReference.ExecuteAsync(operation, default, default, cancellationToken);
+                    return operationResult.HttpStatusCode >= 200 && operationResult.HttpStatusCode <= 299;
+                }
+
+                return false;
             }
             catch (StorageException e)
             {
                 this.Logger.LogError(e, "Error during InsertAsync operation");
                 throw;
             }
-
         }
 
         public async Task<bool> UpsertAsync(Vacation vacation, CancellationToken cancellationToken)
@@ -125,5 +129,33 @@ namespace AzureTableService.Storage.Repositories
         }
 
         #endregion [ IVacationsRepository interface ]
+
+        #region [ Private methods ]
+
+        private async Task<Entities.Vacation> GetByEmployeeAndDateInternalAsync(string employeeId, DateTime date, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var tableReference = await CreateTableReference(VacationsTableName);
+
+                var query = new TableQuery<Entities.Vacation>().Where((new VacationSearchFilters()
+                {
+                    EmployeeId = employeeId,
+                    From = date,
+                    To = date
+                }).GenerateFilterCondition());
+
+                var continuationToken = default(TableContinuationToken);
+                var queryResult = await tableReference.ExecuteQuerySegmentedAsync(query, continuationToken);
+
+                return queryResult.Results.FirstOrDefault();
+            }
+            catch (StorageException e)
+            {
+                this.Logger.LogError(e, "Error during GetByEmployeeAndDateInternalAsync operation");
+                throw;
+            }
+        }
+        #endregion [ Private methods ]
     }
 }
