@@ -30,6 +30,7 @@ namespace WebSite
             services.AddControllersWithViews();
 
             services.AddScoped(typeof(IEmployeesRepository), typeof(TableStorageEmployeesRepository));
+            services.AddScoped(typeof(IVacationsRepository), typeof(TableStorageVacationsRepository));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

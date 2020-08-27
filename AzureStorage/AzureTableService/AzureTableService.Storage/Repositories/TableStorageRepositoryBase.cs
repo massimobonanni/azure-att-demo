@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace AzureTableService.Storage.Repositories
 {
@@ -52,6 +54,15 @@ namespace AzureTableService.Storage.Repositories
             }
 
             this.storageAccount = storageAccount;
+        }
+
+        protected async Task<CloudTable> CreateTableReference(string tableName)
+        {
+            CloudTableClient cloudTableClient = storageAccount.CreateCloudTableClient();
+            var tableReference = cloudTableClient.GetTableReference(tableName);
+
+            await tableReference.CreateIfNotExistsAsync();
+            return tableReference;
         }
     }
 }

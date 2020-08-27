@@ -8,5 +8,7 @@ namespace AzureTableService.Storage.Logger
     {
         public const string QueryDurationMetricName = "QueryDuration";
         public const string QueryCountItemMetricName = "QueryItemCount";
+        public const string QueryFilterName="QueryFilterString";
+        public const string QueryTableName = "QueryTableName";
     }
 }
