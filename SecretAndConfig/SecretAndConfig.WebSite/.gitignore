@@ -351,6 +351,6 @@ MigrationBackup/
 
 # Local settings
 appsettings.local.json
-appsettings.local.*json
+appsettings.local.*.json
 *.local.json
 *.local.*.json
