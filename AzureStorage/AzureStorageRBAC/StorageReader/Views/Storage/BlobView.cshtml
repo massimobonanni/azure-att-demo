@@ -1,0 +1,47 @@
+﻿@model StorageReader.Models.Storage.BlobModel
+
+@{
+    ViewData["Title"] = @Model.Feature;
+}
+
+<h2>@Model.Feature</h2>
+<br/>
+<div>
+    <h4>Blob Data</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ContainerName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ContainerName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BlobPath)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BlobPath)
+        </dd>
+        @if (!Model.HasException)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Content)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Content)
+            </dd>
+        }
+        else
+        {
+            <dt class="col-sm-2 text-danger">
+                @Html.DisplayNameFor(model => model.Exception)
+            </dt>
+            <dd class="col-sm-10 text-danger">
+                @Html.DisplayFor(model => model.Exception.Message)
+            </dd>
+
+        }
+
+
+    </dl>
+</div>

@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "Storage Reader Web App";
+}
+
+<div class="text-center">
+    <h2 class="display-4">Storage Reader Web App</h2>
+    <br />
+    <p>
+        This demo allows you to test different types of authorization on Azure Storage Account.<br>
+        In the following box you can find the authorization supportaed and how you must configure the app.
+    </p>
+</div>
+<br />
+<div class="accordion" id="features">
+    <div class="card">
+        <div class="card-header" id="accessKeys">
+            <h3 class="mb-0">
+                <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <h3>Access keys</h3>
+                </button>
+            </h3>
+        </div>
+
+        <div id="collapseOne" class="collapse" aria-labelledby="accessKeys" data-parent="#features">
+            <div class="card-body">
+                <p class="text-justify">Uses the configuration string to access to a blob inside a container in the storage account</p>
+                <br />
+                <p>The url to test this feature has the following format:</p>
+                <code>/storage/readusingconnstring?containerName=&lt;containerName&gt;&blobPath=&lt;blobPath&gt;</code>
+                <br />
+                <br />
+                <p>
+                    where:<br />
+                    <code>containerName</code> - is the name of the container to access;<br />
+                    <code>blobPath</code> - is the blob path to read.
+                </p>
+
+                <h4 class="text-left">Configuration file</h4>
+                <p>
+                    <code>ConnectionStrings:StorageConnectionString</code> : contains the storage connection string retrieved in the Azure portal.
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="appRegistration">
+            <h3 class="mb-0">
+                <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                    <h3>App Registration</h3>
+                </button>
+            </h3>
+        </div>
+
+        <div id="collapseTwo" class="collapse" aria-labelledby="appRegistration" data-parent="#features">
+            <div class="card-body">
+                <p class="text-justify">Uses an App Registration and RBAC to access to a blob inside a container in the storage account.</p>
+                <br />
+                <p>The url to test this feature has the following format:</p>
+                <code>/storage/readusingappregistration?containerName=&lt;containerName&gt;&blobPath=&lt;blobPath&gt;</code>
+                <br />
+                <br />
+                <p>
+                    where:<br />
+                    <code>containerName</code> - is the name of the container to access;<br />
+                    <code>blobPath</code> - is the blob path to read.
+                </p>
+
+                <h4 class="text-left">Configuration file</h4>
+                <p>
+                    <code>ApplicationID</code> : contains the application id generated for the App Registration in the Azure Portal;<br />
+                    <code>TenantId</code> : contains the tenant id retrieved in the Azure Portal;<br />
+                    <code>AppSecret</code> : contains a secret you define in tha Azure Portal for the App Registration;<br />
+                    <code>StorageServiceUri</code> : contains the Container Service URL retrieved from the endpiont configuration of the storage in the Azure Portal.<br />
+                </p>
+
+                <h4 class="text-left">See also</h4>
+                <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app" target="_blank">Quickstart: Register an application with the Microsoft identity platform</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="managedIdentity">
+            <h3 class="mb-0">
+                <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                    <h3>Managed Identity</h3>
+                </button>
+            </h3>
+        </div>
+
+        <div id="collapseThree" class="collapse" aria-labelledby="managedIdentity" data-parent="#features">
+            <div class="card-body">
+                <p class="text-justify">Uses a managed identity and RBAC to access to a blob inside a container in the storage account.</p>
+                <br />
+                <p>The url to test this feature has the following format:</p>
+                <code>/storage/readusingmanagedidentity?containerName=&lt;containerName&gt;&blobPath=&lt;blobPath&gt;</code>
+                <br />
+                <br />
+                <p>
+                    where:<br />
+                    <code>containerName</code> - is the name of the container to access;<br />
+                    <code>blobPath</code> - is the blob path to read.
+                </p>
+
+                <h4 class="text-left">Configuration file</h4>
+                <p>
+                    <code>StorageServiceUri</code> : contains the Container Service URL retrieved from the endpiont configuration of the storage in the Azure Portal.<br />
+                </p>
+
+                <h4 class="text-left">See also</h4>
+                <a href="https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview" target="_blank">What are managed identities for Azure resources?</a>
+                <a href="https://docs.microsoft.com/en-us/azure/app-service/overview-managed-identity" target="_blank">How to use managed identities for App Service and Azure Functions</a>
+            </div>
+        </div>
+    </div>
+</div>
