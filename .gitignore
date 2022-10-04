@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 *.local.*.json
 *.local.json
+/AzureSQLDatabase/AdventureWorksLT/WebSite/Properties/ServiceDependencies/sqldemox5kkvf77vezbu-app - Web Deploy
