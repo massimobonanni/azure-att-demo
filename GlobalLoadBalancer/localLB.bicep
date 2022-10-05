@@ -154,6 +154,17 @@ resource vms 'Microsoft.Compute/virtualMachines@2021-03-01' = [for i in range(1,
   }
 }]
 
+resource vmFEIISEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01'= [for i in range(1, numberOfVMs):{
+  name: 'vm${i}-EnableIIS-Script'
+  location:location
+  parent:vms[i-1]
+  properties:{
+    source:{
+      script:'Install-WindowsFeature -name Web-Server -IncludeManagementTools\nRemove-Item C:\\inetpub\\wwwroot\\iisstart.htm\nAdd-Content -Path "C:\\inetpub\\wwwroot\\iisstart.htm" -Value $("Hello from " + $env:computername)'
+    }
+  }
+}]
+
 resource loadBalancer 'Microsoft.Network/loadBalancers@2021-05-01' = {
   name: loadBalancerName
   location: location
