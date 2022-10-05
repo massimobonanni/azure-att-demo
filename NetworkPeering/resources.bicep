@@ -153,24 +153,44 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-03-01' =  {
   }
 }
 
-// Shutdown schedule per vm
-//{
-//  "type": "microsoft.devtestlab/schedules",
-//  "apiVersion": "2018-09-15",
-//  "name": "[parameters('schedules_shutdown_computevm_westeuropevm_name')]",
-//  "location": "westeurope",
-//  "properties": {
-//      "status": "Enabled",
-//      "taskType": "ComputeVmShutdownTask",
-//      "dailyRecurrence": {
-//          "time": "1800"
-//      },
-//      "timeZoneId": "W. Europe Standard Time",
-//      "notificationSettings": {
-//          "status": "Disabled",
-//          "timeInMinutes": 30,
-//          "notificationLocale": "en"
-//      },
-//      "targetResourceId": "[parameters('virtualMachines_WestEuropeVM_externalid')]"
-//  }
-//}
+resource vmShutdown 'Microsoft.DevTestLab/schedules@2018-09-15' = {
+  name: 'shutdown-computevm-${vmName}'
+  location: location
+  properties: {
+    status: 'Enabled'
+    taskType: 'ComputeVmShutdownTask'
+    dailyRecurrence: {
+      time: '1800'
+    }
+    timeZoneId: 'W. Europe Standard Time'
+    notificationSettings: {
+      status: 'Disabled'
+      timeInMinutes: 30
+      notificationLocale: 'en'
+    }
+    targetResourceId: vm.id
+  }
+}
+
+
+resource vmPingEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01'={
+  name: '${vmName}-EnablePING-Script'
+  location:location
+  parent:vm
+  properties:{
+    source:{
+      script:'Import-Module NetSecurity\nNew-NetFirewallRule -Name Allow_Ping -DisplayName "Allow Ping"  -Description "Packet Internet Groper ICMPv4" -Protocol ICMPv4 -IcmpType 8 -Enabled True -Profile Any -Action Allow'
+    }
+  }
+}
+
+resource vmFEIISEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01'={
+  name: '${vmName}-EnableIIS-Script'
+  location:location
+  parent:vm
+  properties:{
+    source:{
+      script:'Install-WindowsFeature -name Web-Server -IncludeManagementTools\nRemove-Item C:\\inetpub\\wwwroot\\iisstart.htm\nAdd-Content -Path "C:\\inetpub\\wwwroot\\iisstart.htm" -Value $("Hello from " + $env:computername)'
+    }
+  }
+}
