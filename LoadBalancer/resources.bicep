@@ -1,7 +1,14 @@
-param location string
-param envSuffix string
-param adminUsername string
 param numberOfVMs int = 2
+
+@description('Admin username for the Virtual Machines.')
+param adminUsername string
+
+
+@description('Demo name is used to create the resource group name and resources names')
+param demoName string = 'LB'
+
+@description('Azure location in which you create the resources')
+param location string= resourceGroup().location
 
 @description('Password for the Virtual Machine.')
 @minLength(12)
@@ -13,9 +20,9 @@ var publicIpSku = 'Standard'
 var OSVersion = '2022-datacenter'
 var vmSize = 'Standard_B1s'
 
-var virtualNetworkName = '${envSuffix}-VNET'
-var networkSecurityGroupName = '${envSuffix}-nsg'
-var loadBalancerName = '${envSuffix}-LB'
+var virtualNetworkName = '${demoName}-VNET'
+var networkSecurityGroupName = '${demoName}-nsg'
+var loadBalancerName = '${demoName}-LB'
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-01-01' = {
   name: virtualNetworkName
@@ -42,7 +49,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-01-01' = {
 }
 
 resource vmPips 'Microsoft.Network/publicIPAddresses@2021-02-01' = [for i in range(1, numberOfVMs): {
-  name: '${envSuffix}-vm${i}-PIP'
+  name: '${demoName}-vm${i}-PIP'
   location: location
   sku: {
     name: publicIpSku
@@ -50,7 +57,7 @@ resource vmPips 'Microsoft.Network/publicIPAddresses@2021-02-01' = [for i in ran
   properties: {
     publicIPAllocationMethod: publicIPAllocationMethod
     dnsSettings: {
-      domainNameLabel: toLower('${envSuffix}-${uniqueString(resourceGroup().id, '${envSuffix}-vm${i}')}')
+      domainNameLabel: toLower('${demoName}-${uniqueString(resourceGroup().id, '${demoName}-vm${i}')}')
     }
   }
   dependsOn: [
@@ -107,7 +114,7 @@ resource securityGroup 'Microsoft.Network/networkSecurityGroups@2021-02-01' = {
 }
 
 resource vmNICs 'Microsoft.Network/networkInterfaces@2021-02-01' = [for i in range(1, numberOfVMs): {
-  name: '${envSuffix}-vm${i}-Nic'
+  name: '${demoName}-vm${i}-Nic'
   location: location
   properties: {
     ipConfigurations: [
@@ -137,14 +144,14 @@ resource vmNICs 'Microsoft.Network/networkInterfaces@2021-02-01' = [for i in ran
 }]
 
 resource vms 'Microsoft.Compute/virtualMachines@2021-03-01' = [for i in range(1, numberOfVMs): {
-  name: '${envSuffix}-vm${i}'
+  name: '${demoName}-vm${i}'
   location: location
   properties: {
     hardwareProfile: {
       vmSize: vmSize
     }
     osProfile: {
-      computerName: '${envSuffix}-vm${i}'
+      computerName: '${demoName}-vm${i}'
       adminUsername: adminUsername
       adminPassword: adminPassword
     }
@@ -172,28 +179,8 @@ resource vms 'Microsoft.Compute/virtualMachines@2021-03-01' = [for i in range(1,
   }
 }]
 
-resource vmFEIISEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01' = [for i in range(1, numberOfVMs): {
-  name: 'vm${i}-EnableIIS-Script'
-  location: location
-  parent: vms[i - 1]
-  properties: {
-    asyncExecution: false
-    source: {
-      script: '''
-        Install-WindowsFeature -name Web-Server -IncludeManagementTools
-        Remove-Item C:\\inetpub\\wwwroot\\iisstart.htm
-        Add-Content -Path "C:\\inetpub\\wwwroot\\iisstart.htm" -Value $("Hello from " + $env:computername)  
-      '''
-    }
-  }
-  dependsOn: [
-    loadBalancer
-    vms[i - 1]
-  ]
-}]
-
 resource loadBalancerPIP 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
-  name: '${envSuffix}-LB-PIP'
+  name: '${demoName}-LB-PIP'
   location: location
   sku: {
     name: publicIpSku
@@ -201,7 +188,7 @@ resource loadBalancerPIP 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
   properties: {
     publicIPAllocationMethod: publicIPAllocationMethod
     dnsSettings: {
-      domainNameLabel: toLower('${envSuffix}-${uniqueString(resourceGroup().id, '${envSuffix}-LB')}')
+      domainNameLabel: toLower('${demoName}-${uniqueString(resourceGroup().id, '${demoName}-LB')}')
     }
   }
 }

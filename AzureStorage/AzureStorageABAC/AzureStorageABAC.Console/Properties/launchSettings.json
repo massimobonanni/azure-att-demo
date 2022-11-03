@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AzureStorageABAC.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "sub1"
+    }
+  }
+}
