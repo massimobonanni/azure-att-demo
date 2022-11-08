@@ -1,6 +1,6 @@
-# Event Grid Demo IaC
+# NSG Demo IaC
 
-This project contains the bicep templates you can use to create the environment to host Event Grid Demo.
+This project contains the bicep templates you can use to create the environment to host NSG Demo.
 
 To create the resource group and to deploy the resources you need for the project, simply run the following command:
 
@@ -18,10 +18,9 @@ You can also set these parameters:
 
 ```
 az deployment sub create --location <your region> --template-file main.bicep --parameters location=<location to deploy>
-```
+``
 
 The demo is composed of:
-- Storage Account: this storage emits event and the events are redirected to event grid viewer throught the event grid topic
-- Event Grid Topic : captures the event from the storage and rediect to event grid viewer using the subscription
-- Event Grid Subscription : connects the topic to the event grid viewer
-- App Service: is the handler for the subscription that routes the event from storage
+- VNet : a virtual Network 
+- 3 VMS: the VMs simulate a three tier application with FrontEnd, backEnd and DB
+- NSG : the network security group contains the rules to avoid FrontEnd communicates to DB and BackEnd and DB cannot be invoked by Internet
