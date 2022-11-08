@@ -20,6 +20,7 @@ You can also set these parameters:
 az deployment sub create --location <your region> --template-file main.bicep --parameters location=<location to deploy>
 ``
 
+
 The demo is composed of:
 - VNet : a virtual Network 
 - 3 VMS: the VMs simulate a three tier application with FrontEnd, backEnd and DB
