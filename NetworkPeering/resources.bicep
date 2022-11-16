@@ -2,7 +2,7 @@
 param location string = resourceGroup().location
 
 @description('The base ip address for the network address space.')
-param vnetIpAddress string 
+param vnetIpAddress string
 
 @description('The CIDR mask number for the VNet.')
 param cidrMask int
@@ -16,12 +16,12 @@ param adminUsername string
 param adminPassword string
 
 var networkName = 'VNet-${location}'
-var subnetName='subnet1'
-var vnetAddressSpace='${vnetIpAddress}/${cidrMask}'
-var subnetAddressSpace='${vnetIpAddress}/${cidrMask+1}'
+var subnetName = 'subnet1'
+var vnetAddressSpace = '${vnetIpAddress}/${cidrMask}'
+var subnetAddressSpace = '${vnetIpAddress}/${cidrMask + 1}'
 var vmName = 'vm-${location}'
 
-var nsgName='${location}-nsg'
+var nsgName = '${location}-nsg'
 
 //----------------------------------------------------------
 // Network Security Group
@@ -65,10 +65,10 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-01-01' = {
 //----------------------------------------------------------
 //  VM
 //----------------------------------------------------------
-var diagStoragename='diag${uniqueString(resourceGroup().id)}${location}'
+var diagStoragename = 'diag${uniqueString(resourceGroup().id)}${location}'
 
-resource diagStorage 'Microsoft.Storage/storageAccounts@2021-06-01' =  {
-  name: substring(diagStoragename,0,min(24,length(diagStoragename)))
+resource diagStorage 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+  name: substring(diagStoragename, 0, min(24, length(diagStoragename)))
   location: location
   sku: {
     name: 'Standard_LRS'
@@ -90,7 +90,7 @@ resource vmPip 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
   }
 }
 
-resource vmNIC 'Microsoft.Network/networkInterfaces@2021-02-01' =  {
+resource vmNIC 'Microsoft.Network/networkInterfaces@2021-02-01' = {
   name: '${vmName}-Nic'
   location: location
   properties: {
@@ -103,7 +103,7 @@ resource vmNIC 'Microsoft.Network/networkInterfaces@2021-02-01' =  {
             id: vmPip.id
           }
           subnet: {
-            id: virtualNetwork.properties.subnets[0].id 
+            id: virtualNetwork.properties.subnets[0].id
           }
         }
       }
@@ -111,7 +111,7 @@ resource vmNIC 'Microsoft.Network/networkInterfaces@2021-02-01' =  {
   }
 }
 
-resource vm 'Microsoft.Compute/virtualMachines@2021-03-01' =  {
+resource vm 'Microsoft.Compute/virtualMachines@2021-03-01' = {
   name: vmName
   location: location
   properties: {
@@ -133,7 +133,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-03-01' =  {
       osDisk: {
         createOption: 'FromImage'
         managedDisk: {
-          storageAccountType:  'Standard_LRS'
+          storageAccountType: 'Standard_LRS'
         }
       }
     }
@@ -170,27 +170,33 @@ resource vmShutdown 'Microsoft.DevTestLab/schedules@2018-09-15' = {
     }
     targetResourceId: vm.id
   }
+  dependsOn:[
+    vm
+  ]
 }
 
-
-resource vmPingEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01'={
+resource vmPingEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01' = {
   name: '${vmName}-EnablePING-Script'
-  location:location
-  parent:vm
-  properties:{
-    source:{
-      script:'Import-Module NetSecurity\nNew-NetFirewallRule -Name Allow_Ping -DisplayName "Allow Ping"  -Description "Packet Internet Groper ICMPv4" -Protocol ICMPv4 -IcmpType 8 -Enabled True -Profile Any -Action Allow'
+  location: location
+  parent: vm
+  properties: {
+    source: {
+      script: 'netsh advfirewall firewall add rule name="ICMP Allow incoming V4 echo request" protocol=icmpv4:8,any dir=in action=allow'
     }
   }
 }
 
-resource vmFEIISEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01'={
+resource vmFEIISEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01' = {
   name: '${vmName}-EnableIIS-Script'
-  location:location
-  parent:vm
-  properties:{
-    source:{
-      script:'Install-WindowsFeature -name Web-Server -IncludeManagementTools\nRemove-Item C:\\inetpub\\wwwroot\\iisstart.htm\nAdd-Content -Path "C:\\inetpub\\wwwroot\\iisstart.htm" -Value $("Hello from " + $env:computername)'
+  location: location
+  parent: vm
+  properties: {
+    source: {
+      script: '''
+        Install-WindowsFeature -name Web-Server -IncludeManagementTools
+        Remove-Item C:\\inetpub\\wwwroot\\iisstart.htm
+        Add-Content -Path "C:\\inetpub\\wwwroot\\iisstart.htm" -Value $("Hello from " + $env:computername)
+      '''
     }
   }
 }

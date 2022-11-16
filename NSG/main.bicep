@@ -21,8 +21,10 @@ param adminUsername string
 @secure()
 param adminPassword string
 
+var resourceGroupName='${environmentName}-rg'
+
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
-  name: 'NSGDemo-rg'
+  name: resourceGroupName
   location: location
 }
 
