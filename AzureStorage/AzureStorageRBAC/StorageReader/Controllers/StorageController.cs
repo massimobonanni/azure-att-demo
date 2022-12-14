@@ -30,8 +30,11 @@ namespace StorageReader.Controllers
 
             try
             {
-                var connectionString = this._configuration.GetConnectionString("StorageConnectionString");
-                var blobServiceClient = new BlobServiceClient(connectionString);
+				#region "Credential"
+				var connectionString = this._configuration.GetConnectionString("StorageConnectionString");
+				#endregion "Credential"
+
+				var blobServiceClient = new BlobServiceClient(connectionString);
                 var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
                 var blobClient = containerClient.GetBlobClient(blobPath);
                 var response = await blobClient.DownloadAsync();
@@ -60,12 +63,14 @@ namespace StorageReader.Controllers
 
             try
             {
-                var applicationId = this._configuration["ApplicationID"];
+                #region "Credential" 
+				var applicationId = this._configuration["ApplicationID"];
                 var tenantId = this._configuration["TenantId"];
                 var applicationSecret = this._configuration["AppSecret"];
                 var storageServiceUri = this._configuration["StorageServiceUri"];
+				#endregion "Credential"
 
-                var credential = new ClientSecretCredential(tenantId, applicationId, applicationSecret);
+				var credential = new ClientSecretCredential(tenantId, applicationId, applicationSecret);
                 
                 var blobServiceClient = new BlobServiceClient(new Uri(storageServiceUri), credential);
                 var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
@@ -96,11 +101,12 @@ namespace StorageReader.Controllers
 
             try
             {
+				#region "Credential"
                 var storageServiceUri = this._configuration["StorageServiceUri"];
+				var credential = new ManagedIdentityCredential();
+				#endregion "Credential"
 
-                var credential = new ManagedIdentityCredential();
-
-                var blobServiceClient = new BlobServiceClient(new Uri(storageServiceUri), credential);
+				var blobServiceClient = new BlobServiceClient(new Uri(storageServiceUri), credential);
                 var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
                 var blobClient = containerClient.GetBlobClient(blobPath);
                 var response = await blobClient.DownloadAsync();
