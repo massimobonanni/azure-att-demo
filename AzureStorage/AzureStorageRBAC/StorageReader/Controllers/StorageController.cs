@@ -68,11 +68,10 @@ namespace StorageReader.Controllers
                 var tenantId = this._configuration["TenantId"];
                 var applicationSecret = this._configuration["AppSecret"];
                 var storageServiceUri = this._configuration["StorageServiceUri"];
+				var credential = new ClientSecretCredential(tenantId, applicationId, applicationSecret);
 				#endregion "Credential"
 
-				var credential = new ClientSecretCredential(tenantId, applicationId, applicationSecret);
-                
-                var blobServiceClient = new BlobServiceClient(new Uri(storageServiceUri), credential);
+				var blobServiceClient = new BlobServiceClient(new Uri(storageServiceUri), credential);
                 var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
                 var blobClient = containerClient.GetBlobClient(blobPath);
                 var response = await blobClient.DownloadAsync();
