@@ -144,14 +144,14 @@ resource vmNICs 'Microsoft.Network/networkInterfaces@2021-02-01' = [for i in ran
 }]
 
 resource vms 'Microsoft.Compute/virtualMachines@2021-03-01' = [for i in range(1, numberOfVMs): {
-  name: '${demoName}-vm${i}'
+  name: 'LB-vm${i}'
   location: location
   properties: {
     hardwareProfile: {
       vmSize: vmSize
     }
     osProfile: {
-      computerName: '${demoName}-vm${i}'
+      computerName: 'LB-vm${i}'
       adminUsername: adminUsername
       adminPassword: adminPassword
     }
