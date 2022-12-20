@@ -3,22 +3,23 @@ param numberOfVMs int = 2
 @description('Admin username for the Virtual Machines.')
 param adminUsername string
 
-
 @description('Demo name is used to create the resource group name and resources names')
 param demoName string = 'LB'
 
 @description('Azure location in which you create the resources')
-param location string= resourceGroup().location
+param location string = resourceGroup().location
 
 @description('Password for the Virtual Machine.')
 @minLength(12)
 @secure()
 param adminPassword string
 
+@description('Size of the VMs. The default value is Standard_B1s')
+param vmSize string = 'Standard_B1s'
+
 var publicIPAllocationMethod = 'Static'
 var publicIpSku = 'Standard'
 var OSVersion = '2022-datacenter'
-var vmSize = 'Standard_B1s'
 
 var virtualNetworkName = '${demoName}-VNET'
 var networkSecurityGroupName = '${demoName}-nsg'
@@ -255,4 +256,3 @@ resource loadBalancer 'Microsoft.Network/loadBalancers@2021-05-01' = {
 output vmInfo array = [for i in range(1, numberOfVMs): {
   fqdn: vmPips[i - 1].properties.dnsSettings.fqdn
 }]
-

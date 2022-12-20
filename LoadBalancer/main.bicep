@@ -17,6 +17,9 @@ param location string= deployment().location
 @description('Number of VMs to create in the Load Balancer backend pool')
 param numberOfVMs int = 2
 
+@description('Size of the VMs. The default value is Standard_B1s')
+param vmSize string = 'Standard_B1s'
+
 var resourceGroupName ='${demoName}Demo-rg'
 
 
@@ -34,6 +37,7 @@ module resources 'resources.bicep' = {
     adminUsername:adminUsername
     adminPassword:adminPassword
     numberOfVMs:numberOfVMs
+    vmSize:vmSize
   }
 }
 
