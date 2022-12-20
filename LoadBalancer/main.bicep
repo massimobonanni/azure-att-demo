@@ -46,7 +46,6 @@ module webServers 'webServersSetup.bicep' = {
   name: 'webServers'
   params: {
     location: location
-    demoName:demoName
     numberOfVMs:numberOfVMs
   }
   dependsOn:[

@@ -1,14 +1,11 @@
 param numberOfVMs int = 2
 
-@description('Demo name is used to create the resource group name and resources names')
-param demoName string = 'LB'
-
 @description('Azure location in which you create the resources')
 param location string= resourceGroup().location
 
 
 resource vms 'Microsoft.Compute/virtualMachines@2021-03-01' existing = [for i in range(1, numberOfVMs): {
-  name: '${demoName}-vm${i}'
+  name: 'LB-vm${i}'
 }]
 
 resource vmFEIISEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01' = [for i in range(1, numberOfVMs): {
