@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.10.2" />
+    <PackageReference Include="Azure.Identity" Version="1.11.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.14.0" />
     <PackageReference Include="Faker.Net" Version="2.0.154" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
