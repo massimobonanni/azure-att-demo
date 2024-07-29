@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29613.14
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSite", "WebSite\WebSite.csproj", "{B5262F71-DD3E-4200-86A4-BF69FFC9E0F9}"
 EndProject
@@ -10,6 +10,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5F751B93-0493-45EF-8373-A59FACCE6829}"
 	ProjectSection(SolutionItems) = preProject
 		ManageSQLServerRules.ps1 = ManageSQLServerRules.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IaC", "IaC", "{7CF76DA4-BB52-480E-B19D-BB7899C15EB4}"
+	ProjectSection(SolutionItems) = preProject
+		IaC\main.bicep = IaC\main.bicep
+		IaC\README.md = IaC\README.md
+		IaC\resources.bicep = IaC\resources.bicep
 	EndProjectSection
 EndProject
 Global
