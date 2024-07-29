@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using StorageReader.Models.Storage;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace StorageReader.Controllers
