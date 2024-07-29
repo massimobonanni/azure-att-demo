@@ -351,3 +351,5 @@ MigrationBackup/
 *.local.*.json
 *.local.json
 /AzureSQLDatabase/AdventureWorksLT/WebSite/Properties/ServiceDependencies/sqldemox5kkvf77vezbu-app - Web Deploy
+/AzureStorage/AzureStorageRBAC/StorageReader/Properties/ServiceDependencies/StorageReaderWebApp - Zip Deploy
+/AzureStorage/AzureStorageRBAC/StorageReader/Properties/launchSettings.json
