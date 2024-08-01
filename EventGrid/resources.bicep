@@ -12,7 +12,7 @@ var viewerRepoUrl = 'https://github.com/azure-samples/azure-event-grid-viewer.gi
 //-------------------------------------------------------------
 // Storage Account
 //-------------------------------------------------------------
-resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: storageAccountName
   location: location
   sku: {
@@ -21,11 +21,19 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   kind: 'StorageV2'
   properties: {
     accessTier: 'Hot'
+    allowBlobPublicAccess: true
   }
 }
 
-resource documentContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-05-01' = {
-  name: '${storageAccount.name}/default/documents'
+resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01' ={
+  name: 'default'
+  parent: storageAccount
+  properties: {}  
+}
+
+resource documentContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
+  name: 'documents'
+  parent: blobService
   properties: {
     publicAccess: 'Blob'
     metadata: {}
