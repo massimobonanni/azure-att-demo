@@ -116,7 +116,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-03-01' = {
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_B1s'
+      vmSize: 'Standard_B4ls_v2'
     }
     osProfile: {
       computerName: vmName
@@ -170,9 +170,6 @@ resource vmShutdown 'Microsoft.DevTestLab/schedules@2018-09-15' = {
     }
     targetResourceId: vm.id
   }
-  dependsOn:[
-    vm
-  ]
 }
 
 resource vmPingEnabled 'Microsoft.Compute/virtualMachines/runCommands@2022-03-01' = {

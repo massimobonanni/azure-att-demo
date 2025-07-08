@@ -6,10 +6,10 @@ param location string = resourceGroup().location
 param environmentName string = 'nsgDemo${uniqueString(resourceGroup().id)}'
 
 @description('The base ip address for the network address space.')
-param vnetIpAddress string
+param vnetIpAddress string = '10.0.0.0'
 
 @description('The CIDR mask number for the VNet.')
-param cidrMask int
+param cidrMask int = 16
 
 @description('Admin username for vms.')
 param adminUsername string
