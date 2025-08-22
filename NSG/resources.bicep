@@ -19,6 +19,8 @@ param adminUsername string
 @secure()
 param adminPassword string
 
+var vmSize = 'Standard_B4ls_v2'
+
 //----------------------------------------------------------
 // Application Security Groups
 //----------------------------------------------------------
@@ -281,7 +283,7 @@ resource vmFE 'Microsoft.Compute/virtualMachines@2021-03-01' = {
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_B1s'
+      vmSize: vmSize
     }
     osProfile: {
       computerName: vmFEName
@@ -402,7 +404,7 @@ resource vmBE 'Microsoft.Compute/virtualMachines@2021-03-01' = {
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_B1s'
+      vmSize: vmSize
     }
     osProfile: {
       computerName: vmBEName
@@ -523,7 +525,7 @@ resource vmDB 'Microsoft.Compute/virtualMachines@2021-03-01' = {
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_B1s'
+      vmSize: vmSize
     }
     osProfile: {
       computerName: vmDBName
