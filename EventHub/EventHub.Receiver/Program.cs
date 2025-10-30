@@ -18,12 +18,12 @@ if (string.IsNullOrEmpty(eventHubConfig.ConnectionString))
     throw new InvalidOperationException("EventHub ConnectionString is required");
 
 if (string.IsNullOrEmpty(eventHubConfig.EventHubName))
- throw new InvalidOperationException("EventHub EventHubName is required");
+    throw new InvalidOperationException("EventHub EventHubName is required");
 
 var connectionString = eventHubConfig.ConnectionString;
 var eventHubName = eventHubConfig.EventHubName;
-var consumerGroup = string.IsNullOrEmpty(eventHubConfig.ConsumerGroup) 
-    ? EventHubConsumerClient.DefaultConsumerGroupName 
+var consumerGroup = string.IsNullOrEmpty(eventHubConfig.ConsumerGroup)
+    ? EventHubConsumerClient.DefaultConsumerGroupName
     : eventHubConfig.ConsumerGroup;
 
 // Create a consumer client
@@ -40,7 +40,7 @@ try
     Console.CancelKeyPress += (sender, eventArgs) =>
     {
         eventArgs.Cancel = true;
-      cancellationSource.Cancel();
+        cancellationSource.Cancel();
     };
 
     // Read events from all partitions
@@ -48,22 +48,22 @@ try
     {
         Console.WriteLine($"Event received from partition {partitionEvent.Partition.PartitionId}:");
         Console.WriteLine($"  Sequence Number: {partitionEvent.Data.SequenceNumber}");
-        Console.WriteLine($"  Offset: {partitionEvent.Data.Offset}");
+        Console.WriteLine($"  Offset: {partitionEvent.Data.OffsetString}");
         Console.WriteLine($"  Enqueued Time: {partitionEvent.Data.EnqueuedTime}");
 
         // Convert event body to string
         string eventBody = Encoding.UTF8.GetString(partitionEvent.Data.EventBody.ToArray());
- Console.WriteLine($"  Body: {eventBody}");
+        Console.WriteLine($"  Body: {eventBody}");
 
         // Display properties if any
-     if (partitionEvent.Data.Properties.Count > 0)
+        if (partitionEvent.Data.Properties.Count > 0)
         {
-   Console.WriteLine("  Properties:");
-   foreach (var property in partitionEvent.Data.Properties)
-          {
- Console.WriteLine($"    {property.Key}: {property.Value}");
-         }
-   }
+            Console.WriteLine("  Properties:");
+            foreach (var property in partitionEvent.Data.Properties)
+            {
+                Console.WriteLine($"    {property.Key}: {property.Value}");
+            }
+        }
 
         Console.WriteLine();
     }
