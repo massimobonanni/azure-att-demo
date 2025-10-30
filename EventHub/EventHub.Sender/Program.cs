@@ -24,14 +24,33 @@ if (string.IsNullOrEmpty(eventHubConfig.EventHubName))
 var connectionString = eventHubConfig.ConnectionString;
 var eventHubName = eventHubConfig.EventHubName;
 
-// Read sender configuration
-var numberOfMessages = configuration.GetValue<int>("Sender:NumberOfMessages", 10);
-var delayBetweenMessages = configuration.GetValue<int>("Sender:DelayBetweenMessagesMs", 1000);
+// Ask user for sender configuration
+Console.WriteLine($"Event Hub Sender for '{eventHubName}'");
+Console.WriteLine();
+
+int numberOfMessages;
+while (true)
+{
+    Console.Write("Enter the number of messages to send: ");
+    if (int.TryParse(Console.ReadLine(), out numberOfMessages) && numberOfMessages > 0)
+        break;
+    Console.WriteLine("Please enter a valid positive number.");
+}
+
+int delayBetweenMessages;
+while (true)
+{
+    Console.Write("Enter the delay between messages (in milliseconds): ");
+    if (int.TryParse(Console.ReadLine(), out delayBetweenMessages) && delayBetweenMessages >= 0)
+        break;
+    Console.WriteLine("Please enter a valid non-negative number.");
+}
+
+Console.WriteLine();
 
 // Create a producer client
 await using var producer = new EventHubProducerClient(connectionString, eventHubName);
 
-Console.WriteLine($"Event Hub Sender for '{eventHubName}'");
 Console.WriteLine($"Sending {numberOfMessages} messages with {delayBetweenMessages}ms delay between them...");
 Console.WriteLine();
 
@@ -39,9 +58,6 @@ try
 {
     for (int i = 1; i <= numberOfMessages; i++)
     {
-        // Create a batch of events
-        using EventDataBatch eventBatch = await producer.CreateBatchAsync();
-
         // Create event data
         var messageBody = new
         {
@@ -58,14 +74,8 @@ try
         eventData.Properties.Add("MessageNumber", i);
         eventData.Properties.Add("SentAt", DateTime.UtcNow.ToString("o"));
 
-        // Try to add the event to the batch
-        if (!eventBatch.TryAdd(eventData))
-        {
-            throw new Exception($"Event {i} is too large for the batch");
-        }
-
-        // Send the batch of events to the event hub
-        await producer.SendAsync(eventBatch);
+        // Send the event to the event hub
+        await producer.SendAsync(new[] { eventData });
 
         Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] Message {i}/{numberOfMessages} sent successfully");
         Console.WriteLine($"  Content: {messageJson}");
