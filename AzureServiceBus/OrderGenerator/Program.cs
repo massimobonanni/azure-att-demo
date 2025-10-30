@@ -22,8 +22,23 @@ var config = app.Services.GetRequiredService<IConfiguration>();
 var serviceBusConnection = config["ServiceBus:ConnectionString"];
 var topicName = config["ServiceBus:TopicName"];
 
+// Ask user for the number of orders to generate
+int numberOfOrders;
+while (true)
+{
+    Console.Write("Enter the number of orders to generate: ");
+    var input = Console.ReadLine();
+    
+    if (int.TryParse(input, out numberOfOrders) && numberOfOrders > 0)
+    {
+        break;
+    }
+    
+    Console.WriteLine("Please enter a valid positive number.");
+}
+
 // Sample orders to send
-var orders = OrderGenerator.Generate(25, seed: DateTime.Now.Microsecond);
+var orders = OrderGenerator.Generate(numberOfOrders, seed: DateTime.Now.Microsecond);
 
 await using var client = new ServiceBusClient(serviceBusConnection);
 ServiceBusSender sender = client.CreateSender(topicName);

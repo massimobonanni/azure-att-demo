@@ -24,13 +24,36 @@ var serviceBusConnectionString = config["ServiceBus:ConnectionString"];
 var topicName = config["ServiceBus:TopicName"];
 var subscriptionName = config["ServiceBus:SubscriptionName"];
 
+// Validate that subscription name is configured
+if (string.IsNullOrWhiteSpace(subscriptionName))
+{
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("Subscription name is not configured in appsettings.");
+    Console.WriteLine("Please enter the subscription name:");
+    Console.ResetColor();
+    subscriptionName = Console.ReadLine();
+
+    if (string.IsNullOrWhiteSpace(subscriptionName))
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("Subscription name cannot be empty. Exiting application.");
+        Console.ResetColor();
+        return;
+    }
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"Using subscription name: {subscriptionName}");
+    Console.ResetColor();
+}
+
 await using var client = new ServiceBusClient(serviceBusConnectionString);
 
-var processor = client.CreateProcessor(topicName, subscriptionName, new ServiceBusProcessorOptions
-{
-    AutoCompleteMessages = false,
-    MaxConcurrentCalls = 1
-});
+var processor = client.CreateProcessor(topicName, subscriptionName,
+        new ServiceBusProcessorOptions
+        {
+            AutoCompleteMessages = false,
+            MaxConcurrentCalls = 1
+        });
 
 // Attach handlers
 processor.ProcessMessageAsync += ProcessMessageHandler;
@@ -59,7 +82,7 @@ static async Task ProcessMessageHandler(ProcessMessageEventArgs args)
         if (order is not null)
         {
             Console.WriteLine($"[Message Received] Order : ");
-            Console.ForegroundColor= ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"{order}");
             Console.ResetColor();
         }
