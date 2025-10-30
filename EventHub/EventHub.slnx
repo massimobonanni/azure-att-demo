@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="EventHub.MessageProcessor/EventHub.MessageProcessor.csproj" />
+  <Project Path="EventHub.Receiver/EventHub.Receiver.csproj" />
+  <Project Path="EventHub.Sender/EventHub.Sender.csproj" />
+</Solution>
