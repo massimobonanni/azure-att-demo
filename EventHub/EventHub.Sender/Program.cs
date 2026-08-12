@@ -71,7 +71,7 @@ try
         var eventData = new EventData(Encoding.UTF8.GetBytes(messageJson));
 
         // Add custom properties
-        eventData.Properties.Add("CustomProperty01", new Guid());
+        eventData.Properties.Add("CustomProperty01", Guid.NewGuid());
         eventData.Properties.Add("CustomProperty02", Random.Shared.Next());
 
         // Send the event to the event hub
